@@ -173,6 +173,33 @@ A real TetR conservation check using the local PDB subset is available:
 .venv/bin/python explorer/tests/conservation_probe.py --job JOB_ID
 ```
 
+## Online demo
+
+A read-only copy of the explorer is published with GitHub Pages at
+**<https://zhuoyang-ye.github.io/alphafold3-interactive-UI/>**. It shows the
+structures, contacts, confidence, conservation results, and job logs that were
+in the local library when it was published. Predictions, imports, and new
+analyses need the local explorer.
+
+To update it after adding structures or results, start the explorer and run:
+
+```bash
+bash run_explorer.sh            # in one Terminal window
+bash explorer/publish_demo.sh   # in another, from the repository root
+```
+
+This saves every view of the current library into static files
+(`explorer/build_demo.py`), adds `explorer/demo/demo.js` to serve them, and
+commits the result to the `gh-pages` branch. Your home folder is replaced by `~`
+in all saved data, and publishing stops if your user or computer name remains
+in any file. **Everything in your library is published**, so remove anything
+you want to keep private first. Published AF3 predictions remain subject to the
+[AlphaFold 3 Output Terms of Use](../OUTPUT_TERMS_OF_USE.md); the demo shows
+the required notice and citation.
+
+For a fork, enable Pages once under **Settings → Pages**: deploy from the
+`gh-pages` branch, root folder.
+
 ## Verification
 
 ```bash

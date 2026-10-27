@@ -13,6 +13,11 @@ When you finish, you will be able to:
 
 Everything stays on your Mac. Nothing is uploaded anywhere.
 
+> **Want to see it before installing?** Try the read-only
+> [online demo](https://zhuoyang-ye.github.io/alphafold3-interactive-UI/). It
+> shows the explorer with a few saved structures. Running your own predictions
+> needs the setup below.
+
 ---
 
 ## Before you start: what you need

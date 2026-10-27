@@ -3,6 +3,8 @@
 > **New to Python, or running on a Mac?** Start with
 > [GETTING_STARTED_MACOS.md](GETTING_STARTED_MACOS.md), a step-by-step guide
 > to installing and using AlphaFold 3 and its local web explorer on Apple Silicon.
+> Preview the explorer in your browser with the read-only
+> [online demo](https://zhuoyang-ye.github.io/alphafold3-interactive-UI/).
 
 # AlphaFold 3
 
