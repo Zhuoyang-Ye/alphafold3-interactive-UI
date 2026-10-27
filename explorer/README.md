@@ -27,6 +27,9 @@ The default database and model locations are `~/public_databases` and `~/models`
 logs, predictions, and the job history are stored in `explorer/data/`, which is
 ignored by Git. Existing AF3 source files and downloaded databases are not edited.
 
+Hover over (or tab to) a setting, score, or option for a plain-language
+explanation. The text for every control is in `static/tips.js`.
+
 ## Explore
 
 The initial library contains local experimental TetR–DNA (1QPI),

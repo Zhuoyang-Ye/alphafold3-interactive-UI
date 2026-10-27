@@ -187,6 +187,10 @@ Now open **<http://127.0.0.1:8765>** in Safari or Chrome.
 **Leave the Terminal window open** while you use the explorer. Closing it, or
 pressing `Control` + `C` in it, stops the explorer.
 
+Not sure what a setting or score means? **Hover the mouse over it** for a short
+explanation. This works for run modes, confidence scores, distance cutoffs,
+molecule types, and most other options.
+
 ### Your first prediction
 
 1. Click **New experiment**.
