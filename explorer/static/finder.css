@@ -39,5 +39,3 @@
 .finder-entry-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 2px;position:sticky;bottom:0;background:#fbfcf9}
 .finder-entry-actions .primary{font-size:11px;padding:8px 14px}
 .draft-warning{color:var(--red)}
-.secondary.danger{color:var(--red)}
-.secondary.danger:hover{background:#fbefeb}

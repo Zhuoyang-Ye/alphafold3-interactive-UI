@@ -52,10 +52,12 @@ def validate_input(value, mode):
         for kind, molecule in entry.items() if isinstance(entry, dict) else []:
             if not isinstance(molecule, dict):
                 continue
+            ids = molecule.get('id')
+            chains = ', '.join(map(str, ids)) if isinstance(ids, list) else ids
             if kind in ('protein', 'dna', 'rna') and not str(molecule.get('sequence') or '').strip():
-                raise ValueError(f'Chain {molecule.get("id")} ({"protein" if kind == "protein" else kind.upper()}) has no sequence. Paste one or remove it.')
+                raise ValueError(f'Chain {chains} ({"protein" if kind == "protein" else kind.upper()}) has no sequence. Paste one or remove it.')
             if kind == 'ligand' and not (molecule.get('ccdCodes') or molecule.get('smiles')):
-                raise ValueError(f'Ligand chain {molecule.get("id")} has no CCD code or SMILES. Add one or remove it.')
+                raise ValueError(f'Ligand chain {chains} has no CCD code or SMILES. Add one or remove it.')
     if mode == 'quick':
         for entry in value.get('sequences', []):
             for kind, molecule in entry.items():

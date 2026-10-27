@@ -284,9 +284,77 @@ async function submitJob() {
 }
 function renderJobs() {
   $('job-count').textContent=state.jobs.filter(j=>['running','queued','cancelling'].includes(j.status)).length||state.jobs.length;
-  $('job-list').innerHTML=state.jobs.length?state.jobs.map(j=>`<button class="job-card ${state.job===j.id?'selected':''}" data-job="${j.id}"><div class="job-card-header"><strong>${esc(j.name)}</strong><span class="status-tag ${esc(j.status)}">${esc(j.status)}</span></div><p>${esc(modeName(j.mode))}<br>${new Date(j.created_at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · ${j.backend.toUpperCase()}</p></button>`).join(''):'<div class="empty">Your experiments will appear here.<br>Start with a small protein or a TetR example.</div>';
-  $('job-list').querySelectorAll('button').forEach(b=>b.onclick=()=>selectJob(b.dataset.job).catch(e=>toast(e.message)));
+  if(!state.jobs.some(j=>j.id===state.swipedJob))state.swipedJob=null;
+  $('job-list').innerHTML=state.jobs.length?state.jobs.map(j=>{
+    const open=state.swipedJob===j.id,active=['running','queued','cancelling'].includes(j.status);
+    return `<div class="job-swipe ${open?'open':''}" data-swipe="${j.id}"><button class="job-swipe-delete" data-delete="${j.id}" tabindex="${open?0:-1}" aria-label="Delete ${esc(j.name)}">Delete</button><button class="job-card ${state.job===j.id?'selected':''}" data-job="${j.id}" ${active?'data-active="1"':'aria-keyshortcuts="ArrowLeft"'}><div class="job-card-header"><strong>${esc(j.name)}</strong><span class="status-tag ${esc(j.status)}">${esc(j.status)}</span></div><p>${esc(modeName(j.mode))}<br>${new Date(j.created_at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · ${j.backend.toUpperCase()}</p></button></div>`;
+  }).join('')+'<p class="job-list-hint">Swipe an experiment left to delete it.</p>':'<div class="empty">Your experiments will appear here.<br>Start with a small protein or a TetR example.</div>';
+  $('job-list').querySelectorAll('.job-card').forEach(b=>b.onclick=()=>{
+    if(state.swipeClick)return;
+    const wasOpen=state.swipedJob===b.dataset.job;
+    if(state.swipedJob)setSwipe(null);
+    if(!wasOpen)selectJob(b.dataset.job).catch(e=>toast(e.message));
+  });
+  $('job-list').querySelectorAll('.job-swipe-delete').forEach(b=>b.onclick=()=>{const job=state.jobs.find(j=>j.id===b.dataset.delete);if(job)deleteJob(job).catch(e=>toast(e.message));});
   if(!state.job&&state.jobs.length) selectJob(state.jobs[0].id).catch(e=>toast(e.message));
+}
+const SWIPE_WIDTH=88;
+function setSwipe(id) {
+  state.swipedJob=id;
+  document.querySelectorAll('.job-swipe').forEach(row=>{
+    const open=row.dataset.swipe===id;
+    row.classList.toggle('open',open);row.querySelector('.job-swipe-delete').tabIndex=open?0:-1;
+    row.querySelector('.job-card').style.transform='';
+  });
+}
+// Swipe a finished job left (drag, touch, or two-finger trackpad swipe) to reveal Delete.
+function setupJobSwipe() {
+  const list=$('job-list');let drag=null,wheel={id:null,total:0,timer:null};
+  list.addEventListener('pointerdown',e=>{
+    const card=e.target.closest('.job-card');
+    if(card&&!card.dataset.active&&e.button===0)drag={card,id:card.dataset.job,pointer:e.pointerId,x:e.clientX,y:e.clientY,
+      base:state.swipedJob===card.dataset.job?-SWIPE_WIDTH:0,offset:0,moving:false};
+  });
+  list.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.pointer)return;
+    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(!drag.moving) {
+      if(Math.abs(dy)>8&&Math.abs(dy)>Math.abs(dx)){drag=null;return;}
+      if(Math.abs(dx)<8)return;
+      drag.moving=true;drag.card.setPointerCapture(e.pointerId);drag.card.classList.add('dragging');
+    }
+    drag.offset=Math.max(-SWIPE_WIDTH*1.4,Math.min(0,drag.base+dx));
+    drag.card.style.transform=`translateX(${drag.offset}px)`;
+  });
+  const end=e=>{
+    if(!drag||e.pointerId!==drag.pointer)return;
+    if(drag.moving) {
+      drag.card.classList.remove('dragging');
+      state.swipeClick=true;setTimeout(()=>{state.swipeClick=false;});
+      setSwipe(drag.offset<-SWIPE_WIDTH/2?drag.id:null);
+    }
+    drag=null;
+  };
+  list.addEventListener('pointerup',end);list.addEventListener('pointercancel',end);
+  list.addEventListener('wheel',e=>{
+    const card=e.target.closest('.job-card');
+    if(!card||Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
+    e.preventDefault();
+    if(card.dataset.active)return;
+    if(wheel.id!==card.dataset.job)wheel={id:card.dataset.job,total:0,timer:null};
+    wheel.total+=e.deltaX;clearTimeout(wheel.timer);wheel.timer=setTimeout(()=>{wheel.total=0;},250);
+    if(wheel.total>40&&state.swipedJob!==wheel.id){setSwipe(wheel.id);wheel.total=0;}
+    else if(wheel.total<-40&&state.swipedJob===wheel.id){setSwipe(null);wheel.total=0;}
+  },{passive:false});
+  list.addEventListener('keydown',e=>{
+    const card=e.target.closest('.job-card');
+    if(card&&!card.dataset.active&&['ArrowLeft','Delete','Backspace'].includes(e.key)) {
+      e.preventDefault();setSwipe(card.dataset.job);card.parentElement.querySelector('.job-swipe-delete').focus();
+    } else if(state.swipedJob&&(e.key==='Escape'||(e.key==='ArrowRight'&&card))) {
+      e.preventDefault();const id=state.swipedJob;setSwipe(null);list.querySelector(`.job-card[data-job="${id}"]`)?.focus();
+    }
+  });
+  document.addEventListener('pointerdown',e=>{if(state.swipedJob&&!e.target.closest('.job-swipe.open'))setSwipe(null);});
 }
 function phaseFromLog(log, job) {
   if(job.status!=='running')return job.stage;
@@ -314,22 +382,32 @@ function renderJobDetail(job, log) {
   if(job.kind==='conservation')return renderConservationJob(job,log);
   const active=['running','queued','cancelling'].includes(job.status);
   const result=state.structures.find(r=>r.job_id===job.id&&r.sample==='Best ranked');
-  $('job-detail').innerHTML=`<div class="job-title-row"><div><div class="eyebrow muted">EXPERIMENT / ${job.id}</div><h2 style="font-size:23px;margin-top:8px">${esc(job.name)}</h2></div><span class="status-tag ${esc(job.status)}">${esc(job.status)}</span></div><div class="job-meta"><span>${esc(modeName(job.mode))}</span><span>${job.backend.toUpperCase()}</span><span>${job.seeds.length} seed(s) × ${job.samples} sample(s)</span><span>${job.recycles} recycles</span></div><div class="job-stage">${active?'<span class="spinner"></span>':'<span>◇</span>'}<span>${esc(phaseFromLog(log,job))}</span></div>${job.mode==='quick'?'<p class="notice">Sequence-only run: no database alignments or structural templates were used.</p>':''}<div class="job-actions"><a class="secondary" href="/api/jobs/${job.id}/input">↓ Input JSON</a>${job.prepared_input?`<a class="secondary" href="/api/jobs/${job.id}/prepared">↓ Prepared input</a>`:''}${job.mode==='prepare'&&job.prepared_input?'<button id="predict-prepared" class="primary">Predict prepared input →</button>':''}${result?'<button id="view-job-result" class="primary">Explore result →</button>':''}${active?'<button id="cancel-job" class="secondary">Cancel job</button>':'<button id="rerun-job" class="secondary">Use input again</button><button id="delete-job" class="secondary danger">Delete</button>'}</div>${job.error?`<div class="job-error">${esc(job.error)}</div>`:''}<div class="log-heading"><span>LIVE PROCESS LOG</span><span>${active?'UPDATING EVERY 3 SECONDS':'SAVED LOCALLY'}</span></div><pre class="job-log" id="job-log">${esc(log||'Waiting for the worker to start…')}</pre><p class="small muted" style="margin-top:12px">Output folder<br><code>${esc(job.output_dir)}</code></p>`;
+  $('job-detail').innerHTML=`<div class="job-title-row"><div><div class="eyebrow muted">EXPERIMENT / ${job.id}</div><h2 style="font-size:23px;margin-top:8px">${esc(job.name)}</h2></div><span class="status-tag ${esc(job.status)}">${esc(job.status)}</span></div><div class="job-meta"><span>${esc(modeName(job.mode))}</span><span>${job.backend.toUpperCase()}</span><span>${job.seeds.length} seed(s) × ${job.samples} sample(s)</span><span>${job.recycles} recycles</span></div><div class="job-stage">${active?'<span class="spinner"></span>':'<span>◇</span>'}<span>${esc(phaseFromLog(log,job))}</span></div>${job.mode==='quick'?'<p class="notice">Sequence-only run: no database alignments or structural templates were used.</p>':''}<div class="job-actions"><a class="secondary" href="/api/jobs/${job.id}/input">↓ Input JSON</a>${job.prepared_input?`<a class="secondary" href="/api/jobs/${job.id}/prepared">↓ Prepared input</a>`:''}${job.mode==='prepare'&&job.prepared_input?'<button id="predict-prepared" class="primary">Predict prepared input →</button>':''}${result?'<button id="view-job-result" class="primary">Explore result →</button>':''}${active?'<button id="cancel-job" class="secondary">Cancel job</button>':'<button id="rerun-job" class="secondary">Use input again</button>'}</div>${job.error?`<div class="job-error">${esc(job.error)}</div>`:''}<div class="log-heading"><span>LIVE PROCESS LOG</span><span>${active?'UPDATING EVERY 3 SECONDS':'SAVED LOCALLY'}</span></div><pre class="job-log" id="job-log">${esc(log||'Waiting for the worker to start…')}</pre><p class="small muted" style="margin-top:12px">Output folder<br><code>${esc(job.output_dir)}</code></p>`;
   if($('cancel-job'))on('cancel-job','click',async()=>{await api(`/api/jobs/${job.id}/cancel`,{});await refresh();await selectJob(job.id);});
   if($('rerun-job'))on('rerun-job','click',async()=>{openExperiment(await api(`/api/jobs/${job.id}/input`));$('run-mode').value=job.mode;modeNote();});
-  if($('delete-job'))on('delete-job','click',()=>deleteJob(job));
   if($('view-job-result'))on('view-job-result','click',async()=>{setPage('explore');await loadStructure(result.id);});
   if($('predict-prepared'))on('predict-prepared','click',async()=>{const next=await api('/api/jobs',{prepared_job:job.id,mode:'inference',backend:job.backend,samples:job.samples,recycles:job.recycles});await refresh();await selectJob(next.id);});
   const el=$('job-log');el.scrollTop=el.scrollHeight;
+}
+// An in-page dialog rather than window.confirm, which embedded browsers can block silently.
+function confirmAction(title,text,action) {
+  return new Promise(resolve=>{
+    const dialog=$('confirm-dialog');
+    $('confirm-title').textContent=title;$('confirm-message').textContent=text;$('confirm-ok').textContent=action;
+    $('confirm-ok').onclick=()=>{resolve(true);dialog.close();};
+    $('confirm-cancel').onclick=()=>dialog.close();
+    dialog.onclose=()=>resolve(false);
+    dialog.showModal();$('confirm-cancel').focus();
+  });
 }
 async function deleteJob(job) {
   const structures=state.structures.filter(r=>r.job_id===job.id);
   const analyses=state.jobs.filter(j=>j.kind==='conservation'&&structures.some(r=>r.id===j.structure_id));
   const effects=[structures.length?`${structures.length} predicted structure${structures.length===1?'':'s'} will be removed from your library.`:'',
     analyses.length?`${analyses.length} conservation analys${analyses.length===1?'is':'es'} of ${structures.length===1?'it':'them'} will also be deleted.`:''].filter(Boolean).join(' ');
-  if(!confirm(`Delete “${job.name}”?\n\nIts input, log, and output files will be permanently removed from this Mac. ${effects}`))return;
+  if(!await confirmAction(`Delete “${job.name}”?`,`Its input, log, and output files will be permanently removed from this Mac.${effects?'\n\n'+effects:''}`,'Delete')){setSwipe(null);return;}
   await api(`/api/jobs/${job.id}/delete`,{});
-  state.job=null;
+  state.job=null;state.swipedJob=null;
   await refresh();renderJobs();
   if(!state.jobs.length){$('job-detail').innerHTML=state.emptyJobDetail;on('empty-new','click',()=>openExperiment());}
   toast(`Deleted “${job.name}”.`);
@@ -391,7 +469,8 @@ async function init() {
   on('import-pdb','click',()=>importData({pdb_id:$('pdb-code').value}));
   on('import-folder','click',()=>importData({path:$('import-path').value,kind:$('import-predicted').checked?'prediction':'reference'}));
   on('cif-upload','change',async e=>{const file=e.target.files[0];if(file){await importData({cif:await file.text(),name:file.name,kind:$('import-predicted').checked?'prediction':'reference'});e.target.value='';}});
-  setupConservation();setupFinder();
+  setupConservation();setupFinder();setupJobSwipe();
+  on('sidebar-new','click',()=>openExperiment());
   state.emptyJobDetail=$('job-detail').innerHTML;
   const initial=await api('/api/bootstrap');Object.assign(state,{token:initial.token,structures:initial.structures,presets:initial.presets,jobs:initial.jobs,conservationRuns:initial.conservation_runs||[],rate4site:initial.status.rate4site});
   $('run-backend').value=initial.status.backend_default;renderSystem(initial.status);renderLibrary();renderJobs();

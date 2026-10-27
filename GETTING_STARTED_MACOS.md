@@ -205,7 +205,8 @@ hours, depending on the size of the molecule and your Mac.
 
 ### Choosing your own molecules
 
-Click **New experiment**, then **+ Custom input**, and use **Find a molecule**:
+Click **New experiment** (top right, or in the left sidebar), then
+**+ Custom input**, and use **Find a molecule**:
 
 1. Pick a type: **Protein**, **DNA**, **RNA**, **Ligand**, or **Ion**. With the
    search box empty, you see the molecules studied most often.
@@ -218,8 +219,8 @@ The first time the explorer starts, it spends about a minute building this
 catalog from your downloaded files. DNA usually needs both strands; the
 **+ Complementary strand** button adds the matching one for you.
 
-To remove an experiment you no longer need, open it under **Experiments** and
-click **Delete**.
+To remove an experiment you no longer need, go to **Experiments**, swipe its
+card to the left (or drag it with the mouse), and click **Delete**.
 
 The explorer can also:
 

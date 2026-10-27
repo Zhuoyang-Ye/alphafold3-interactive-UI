@@ -91,9 +91,12 @@ Cancellation stops the AF3 process group, including search tools. After a server
 restart, jobs that were queued or running are marked interrupted instead of
 silently rerunning. Use **Use input again** to create a fresh job.
 
-**Delete** removes a finished, failed, or cancelled job after confirmation: its
-folder, the predictions it added to the library, and any conservation analyses
-of those predictions. Cancel an active job before deleting it.
+To delete a finished, failed, or cancelled job, swipe its card left in the
+**Experiments** list (drag, touch, or a two-finger trackpad swipe; with the
+keyboard, focus the card and press ←) and click **Delete**. After confirmation
+this removes its folder, the predictions it added to the library, and any
+conservation analyses of those predictions. Cancel an active job before
+deleting it. **New experiment** is also available in the sidebar.
 
 Full database searches may take hours and use substantial RAM. MPS on Apple
 Silicon is experimental; CPU inference is available as a slower alternative.
