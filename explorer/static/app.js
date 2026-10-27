@@ -223,16 +223,18 @@ function loadDraft(raw,presetId=null) {
 }
 function openExperiment(raw=null) {
   loadDraft(raw||state.presets.find(p=>p.id==='tetr_homodimer')?.input||{name:'My experiment',sequences:[{protein:{id:'A',sequence:''}}],modelSeeds:[42],dialect:'alphafold3',version:4},raw?null:'tetr_homodimer');
-  $('run-mode').value='full';modeNote();$('experiment-dialog').showModal();
+  $('run-mode').value='full';modeNote();$('experiment-dialog').showModal();resetFinder();
 }
 function renderMolecules() {
   $('molecule-list').innerHTML=state.draft.sequences.map((entry,i)=>{
     const [kind,m]=Object.entries(entry)[0];const ids=Array.isArray(m.id)?m.id.join(', '):m.id;
     const content=kind==='ligand'?(m.smiles||m.ccdCodes?.join(', ')||''):(m.sequence||'');
-    return `<div class="molecule-card" data-molecule="${i}"><div class="molecule-top"><select class="molecule-type" aria-label="Molecule ${i+1} type">${['protein','dna','rna','ligand'].map(k=>`<option value="${k}" ${kind===k?'selected':''}>${{protein:'Protein',dna:'DNA',rna:'RNA',ligand:'Ligand / ion'}[k]}</option>`).join('')}</select><span class="chain-hint">Chain IDs</span><input class="molecule-ids" value="${esc(ids)}" placeholder="A, B" aria-label="Molecule ${i+1} chain IDs"><button class="remove-molecule" aria-label="Remove molecule ${i+1}">×</button></div><label class="sr-only">${kind==='ligand'?'Ligand definition':'Sequence'}</label><textarea class="molecule-sequence" aria-label="Molecule ${i+1} ${kind==='ligand'?'definition':'sequence'}" spellcheck="false" placeholder="${kind==='ligand'?'CCD code (e.g. TAC), or select SMILES':'Paste the sequence (one-letter codes)'}">${esc(content)}</textarea><div class="molecule-caption"><span>${kind==='ligand'?'Ligand definition':`${content.length} residues · ${Array.isArray(m.id)?m.id.length:1} chain(s)`}${m.modifications?.length?' · Modifications preserved':''}</span>${kind==='ligand'?`<select class="ligand-format" aria-label="Ligand format"><option value="ccd" ${!m.smiles?'selected':''}>CCD codes</option><option value="smiles" ${m.smiles?'selected':''}>SMILES</option></select>`:''}</div></div>`;
+    return `<div class="molecule-card" data-molecule="${i}"><div class="molecule-top"><select class="molecule-type" aria-label="Molecule ${i+1} type">${['protein','dna','rna','ligand'].map(k=>`<option value="${k}" ${kind===k?'selected':''}>${{protein:'Protein',dna:'DNA',rna:'RNA',ligand:'Ligand / ion'}[k]}</option>`).join('')}</select><span class="chain-hint">Chain IDs</span><input class="molecule-ids" value="${esc(ids)}" placeholder="A, B" aria-label="Molecule ${i+1} chain IDs"><button class="remove-molecule" aria-label="Remove molecule ${i+1}">×</button></div><label class="sr-only">${kind==='ligand'?'Ligand definition':'Sequence'}</label><textarea class="molecule-sequence" aria-label="Molecule ${i+1} ${kind==='ligand'?'definition':'sequence'}" spellcheck="false" placeholder="${kind==='ligand'?'CCD code (e.g. TAC), or select SMILES':'Paste the sequence (one-letter codes)'}">${esc(content)}</textarea><div class="molecule-caption"><span>${kind==='ligand'?'Ligand definition':`${content.length} residues · ${Array.isArray(m.id)?m.id.length:1} chain(s)`}${m.modifications?.length?' · Modifications preserved':''}</span>${kind==='ligand'?`<select class="ligand-format" aria-label="Ligand format"><option value="ccd" ${!m.smiles?'selected':''}>CCD codes</option><option value="smiles" ${m.smiles?'selected':''}>SMILES</option></select>`:''}${kind==='dna'?'<button class="text-button add-complement">+ Complementary strand</button>':''}</div></div>`;
   }).join('');
+  renderDraftSummary();
   $('molecule-list').querySelectorAll('.molecule-card').forEach(card=>{
     const i=Number(card.dataset.molecule);
+    const complement=card.querySelector('.add-complement');if(complement)complement.onclick=()=>{try{addComplement(i);}catch(error){toast(error.message);}};
     card.querySelector('.molecule-type').onchange=()=>{syncBuilder();const kind=card.querySelector('.molecule-type').value;const previous=Object.values(state.draft.sequences[i])[0];state.draft.sequences[i]={[kind]:{id:previous.id,...(kind==='ligand'?{ccdCodes:[]}:{sequence:''})}};renderMolecules();};
     card.querySelector('.remove-molecule').onclick=()=>{syncBuilder();state.draft.sequences.splice(i,1);renderMolecules();};
   });
@@ -312,12 +314,25 @@ function renderJobDetail(job, log) {
   if(job.kind==='conservation')return renderConservationJob(job,log);
   const active=['running','queued','cancelling'].includes(job.status);
   const result=state.structures.find(r=>r.job_id===job.id&&r.sample==='Best ranked');
-  $('job-detail').innerHTML=`<div class="job-title-row"><div><div class="eyebrow muted">EXPERIMENT / ${job.id}</div><h2 style="font-size:23px;margin-top:8px">${esc(job.name)}</h2></div><span class="status-tag ${esc(job.status)}">${esc(job.status)}</span></div><div class="job-meta"><span>${esc(modeName(job.mode))}</span><span>${job.backend.toUpperCase()}</span><span>${job.seeds.length} seed(s) × ${job.samples} sample(s)</span><span>${job.recycles} recycles</span></div><div class="job-stage">${active?'<span class="spinner"></span>':'<span>◇</span>'}<span>${esc(phaseFromLog(log,job))}</span></div>${job.mode==='quick'?'<p class="notice">Sequence-only run: no database alignments or structural templates were used.</p>':''}<div class="job-actions"><a class="secondary" href="/api/jobs/${job.id}/input">↓ Input JSON</a>${job.prepared_input?`<a class="secondary" href="/api/jobs/${job.id}/prepared">↓ Prepared input</a>`:''}${job.mode==='prepare'&&job.prepared_input?'<button id="predict-prepared" class="primary">Predict prepared input →</button>':''}${result?'<button id="view-job-result" class="primary">Explore result →</button>':''}${active?'<button id="cancel-job" class="secondary">Cancel job</button>':'<button id="rerun-job" class="secondary">Use input again</button>'}</div>${job.error?`<div class="job-error">${esc(job.error)}</div>`:''}<div class="log-heading"><span>LIVE PROCESS LOG</span><span>${active?'UPDATING EVERY 3 SECONDS':'SAVED LOCALLY'}</span></div><pre class="job-log" id="job-log">${esc(log||'Waiting for the worker to start…')}</pre><p class="small muted" style="margin-top:12px">Output folder<br><code>${esc(job.output_dir)}</code></p>`;
+  $('job-detail').innerHTML=`<div class="job-title-row"><div><div class="eyebrow muted">EXPERIMENT / ${job.id}</div><h2 style="font-size:23px;margin-top:8px">${esc(job.name)}</h2></div><span class="status-tag ${esc(job.status)}">${esc(job.status)}</span></div><div class="job-meta"><span>${esc(modeName(job.mode))}</span><span>${job.backend.toUpperCase()}</span><span>${job.seeds.length} seed(s) × ${job.samples} sample(s)</span><span>${job.recycles} recycles</span></div><div class="job-stage">${active?'<span class="spinner"></span>':'<span>◇</span>'}<span>${esc(phaseFromLog(log,job))}</span></div>${job.mode==='quick'?'<p class="notice">Sequence-only run: no database alignments or structural templates were used.</p>':''}<div class="job-actions"><a class="secondary" href="/api/jobs/${job.id}/input">↓ Input JSON</a>${job.prepared_input?`<a class="secondary" href="/api/jobs/${job.id}/prepared">↓ Prepared input</a>`:''}${job.mode==='prepare'&&job.prepared_input?'<button id="predict-prepared" class="primary">Predict prepared input →</button>':''}${result?'<button id="view-job-result" class="primary">Explore result →</button>':''}${active?'<button id="cancel-job" class="secondary">Cancel job</button>':'<button id="rerun-job" class="secondary">Use input again</button><button id="delete-job" class="secondary danger">Delete</button>'}</div>${job.error?`<div class="job-error">${esc(job.error)}</div>`:''}<div class="log-heading"><span>LIVE PROCESS LOG</span><span>${active?'UPDATING EVERY 3 SECONDS':'SAVED LOCALLY'}</span></div><pre class="job-log" id="job-log">${esc(log||'Waiting for the worker to start…')}</pre><p class="small muted" style="margin-top:12px">Output folder<br><code>${esc(job.output_dir)}</code></p>`;
   if($('cancel-job'))on('cancel-job','click',async()=>{await api(`/api/jobs/${job.id}/cancel`,{});await refresh();await selectJob(job.id);});
   if($('rerun-job'))on('rerun-job','click',async()=>{openExperiment(await api(`/api/jobs/${job.id}/input`));$('run-mode').value=job.mode;modeNote();});
+  if($('delete-job'))on('delete-job','click',()=>deleteJob(job));
   if($('view-job-result'))on('view-job-result','click',async()=>{setPage('explore');await loadStructure(result.id);});
   if($('predict-prepared'))on('predict-prepared','click',async()=>{const next=await api('/api/jobs',{prepared_job:job.id,mode:'inference',backend:job.backend,samples:job.samples,recycles:job.recycles});await refresh();await selectJob(next.id);});
   const el=$('job-log');el.scrollTop=el.scrollHeight;
+}
+async function deleteJob(job) {
+  const structures=state.structures.filter(r=>r.job_id===job.id);
+  const analyses=state.jobs.filter(j=>j.kind==='conservation'&&structures.some(r=>r.id===j.structure_id));
+  const effects=[structures.length?`${structures.length} predicted structure${structures.length===1?'':'s'} will be removed from your library.`:'',
+    analyses.length?`${analyses.length} conservation analys${analyses.length===1?'is':'es'} of ${structures.length===1?'it':'them'} will also be deleted.`:''].filter(Boolean).join(' ');
+  if(!confirm(`Delete “${job.name}”?\n\nIts input, log, and output files will be permanently removed from this Mac. ${effects}`))return;
+  await api(`/api/jobs/${job.id}/delete`,{});
+  state.job=null;
+  await refresh();renderJobs();
+  if(!state.jobs.length){$('job-detail').innerHTML=state.emptyJobDetail;on('empty-new','click',()=>openExperiment());}
+  toast(`Deleted “${job.name}”.`);
 }
 async function refresh() {
   const data=await api('/api/state');
@@ -327,7 +342,11 @@ async function refresh() {
   const conservationChanged=JSON.stringify(data.conservation_runs||[])!==JSON.stringify(state.conservationRuns);
   state.conservationRuns=data.conservation_runs||[];
   state.structures=data.structures;state.jobs=data.jobs;
-  if(changed) {renderLibrary(); if(!state.selected&&state.structures.length)await loadStructure(state.structures[0].id);}
+  if(changed) {
+    renderLibrary();
+    if(state.selected&&!state.structures.some(r=>r.id===state.selected))state.selected=null;
+    if(!state.selected&&state.structures.length)await loadStructure(state.structures[0].id);
+  }
   if(jobsChanged)renderJobs();
   if(conservationChanged&&state.detail&&$('conservation-chain').value){const runs=conservationRunOptions();await loadConservation(runs[0]?.id||'');}
   if(state.page==='experiments'&&state.job) {
@@ -372,7 +391,8 @@ async function init() {
   on('import-pdb','click',()=>importData({pdb_id:$('pdb-code').value}));
   on('import-folder','click',()=>importData({path:$('import-path').value,kind:$('import-predicted').checked?'prediction':'reference'}));
   on('cif-upload','change',async e=>{const file=e.target.files[0];if(file){await importData({cif:await file.text(),name:file.name,kind:$('import-predicted').checked?'prediction':'reference'});e.target.value='';}});
-  setupConservation();
+  setupConservation();setupFinder();
+  state.emptyJobDetail=$('job-detail').innerHTML;
   const initial=await api('/api/bootstrap');Object.assign(state,{token:initial.token,structures:initial.structures,presets:initial.presets,jobs:initial.jobs,conservationRuns:initial.conservation_runs||[],rate4site:initial.status.rate4site});
   $('run-backend').value=initial.status.backend_default;renderSystem(initial.status);renderLibrary();renderJobs();
   $('preset-list').innerHTML=state.presets.map(p=>`<button class="preset-button" data-preset="${esc(p.id)}"><strong>${esc(p.name)}</strong><small>${esc(p.description)}</small></button>`).join('');

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import queue
 import re
+import shutil
 import signal
 import subprocess
 import threading
@@ -46,6 +47,15 @@ def validate_input(value, mode):
         raise ValueError('Model seeds must be unique.')
     if not str(value.get('name', '')).strip():
         raise ValueError('Give this experiment a name.')
+    # AF3 accepts empty molecules here but fails much later with "Unknown residue type".
+    for entry in value.get('sequences', []) if isinstance(value.get('sequences'), list) else []:
+        for kind, molecule in entry.items() if isinstance(entry, dict) else []:
+            if not isinstance(molecule, dict):
+                continue
+            if kind in ('protein', 'dna', 'rna') and not str(molecule.get('sequence') or '').strip():
+                raise ValueError(f'Chain {molecule.get("id")} ({"protein" if kind == "protein" else kind.upper()}) has no sequence. Paste one or remove it.')
+            if kind == 'ligand' and not (molecule.get('ccdCodes') or molecule.get('smiles')):
+                raise ValueError(f'Ligand chain {molecule.get("id")} has no CCD code or SMILES. Add one or remove it.')
     if mode == 'quick':
         for entry in value.get('sequences', []):
             for kind, molecule in entry.items():
@@ -209,6 +219,18 @@ class JobManager:
                     self._terminate(self.process)
             self._save(job)
             return copy.deepcopy(job)
+
+    def delete(self, job_id):
+        """Remove a finished job and everything in its folder."""
+        with self.lock:
+            job = self.jobs.get(job_id)
+            if not job:
+                raise ValueError('Job not found.')
+            if job['status'] in ('queued', 'running', 'cancelling'):
+                raise ValueError('Cancel this job before deleting it.')
+            del self.jobs[job_id]
+        shutil.rmtree(self.jobs_dir / job_id, ignore_errors=True)
+        return copy.deepcopy(job)
 
     @staticmethod
     def _terminate(process):

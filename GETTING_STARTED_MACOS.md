@@ -203,6 +203,24 @@ Once that works, try **Search databases + predict**. This is the normal,
 accurate mode. A database search can take from tens of minutes to several
 hours, depending on the size of the molecule and your Mac.
 
+### Choosing your own molecules
+
+Click **New experiment**, then **+ Custom input**, and use **Find a molecule**:
+
+1. Pick a type: **Protein**, **DNA**, **RNA**, **Ligand**, or **Ion**. With the
+   search box empty, you see the molecules studied most often.
+2. Or type a name (`hemoglobin`, `tRNA`, `ATP`), a PDB ID (`1QPI`), or paste a
+   sequence.
+3. Click **Add**. To copy a whole known complex, click one of its PDB IDs and
+   then **Add selected**.
+
+The first time the explorer starts, it spends about a minute building this
+catalog from your downloaded files. DNA usually needs both strands; the
+**+ Complementary strand** button adds the matching one for you.
+
+To remove an experiment you no longer need, open it under **Experiments** and
+click **Delete**.
+
 The explorer can also:
 
 - show which residues of two chains are in contact, and export them as a table;

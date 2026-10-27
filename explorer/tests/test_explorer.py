@@ -117,6 +117,13 @@ class InputTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 validate_input(raw,'full')
 
+    def test_rejects_empty_molecules_before_af3_runs(self):
+        for molecule,message in [({'dna':{'id':'A','sequence':''}},'Chain A \\(DNA\\) has no sequence'),
+                ({'protein':{'id':'B','sequence':'  '}},'Chain B \\(protein\\)'),({'ligand':{'id':'C','ccdCodes':[]}},'Ligand chain C')]:
+            raw=input_json();raw['sequences'].append(molecule)
+            with self.assertRaisesRegex(ValueError,message):
+                validate_input(raw,'full')
+
 
 class WorkflowTests(unittest.TestCase):
     def setUp(self):
@@ -208,6 +215,32 @@ print('Fixture process completed',flush=True)
         wait_until(lambda:self.manager.get(first['id'])['status']=='cancelled')
         wait_until(lambda:self.manager.get(second['id'])['status']=='completed')
         self.assertFalse(list(Path(first['output_dir']).glob('**/*_model.cif')))
+
+    def test_delete_removes_files_predictions_and_dependent_analyses(self):
+        job=self.request('/api/jobs',dict(input=input_json(),mode='quick',backend='cpu'))
+        wait_until(lambda:self.manager.get(job['id'])['status']=='completed')
+        wait_until(lambda:len(self.app.structures())==1)
+        structure=self.app.structures()[0]['id']
+        analysis=dict(id='a'*12,kind='conservation',name='Conservation',status='completed',structure_id=structure,
+            created_at='2026-01-01T00:00:00+00:00',output_dir=str(self.manager.jobs_dir/('a'*12)/'output'))
+        (self.manager.jobs_dir/analysis['id']).mkdir()
+        self.manager.jobs[analysis['id']]=analysis
+        result=self.request(f'/api/jobs/{job["id"]}/delete',{})
+        self.assertEqual(result['deleted'],[job['id'],analysis['id']])
+        self.assertEqual(self.request('/api/state')['structures'],[])
+        self.assertEqual(self.request('/api/state')['jobs'],[])
+        self.assertFalse((self.manager.jobs_dir/job['id']).exists())
+        self.assertFalse((self.manager.jobs_dir/analysis['id']).exists())
+
+    def test_delete_refuses_active_jobs(self):
+        job=self.manager.create(dict(input=input_json('long'),mode='quick',backend='cpu'))
+        wait_until(lambda:'Long job started' in self.manager.log(job['id']))
+        with self.assertRaises(HTTPError) as error:
+            self.request(f'/api/jobs/{job["id"]}/delete',{})
+        self.assertEqual(error.exception.code,400)
+        self.assertTrue((self.manager.jobs_dir/job['id']).exists())
+        self.manager.cancel(job['id'])
+        wait_until(lambda:self.manager.get(job['id'])['status']=='cancelled')
 
     def test_requests_require_token_local_host_and_origin(self):
         for token,headers in [(False,{}),(True,{'Origin':'https://example.com'}),(True,{'Host':'example.com'})]:

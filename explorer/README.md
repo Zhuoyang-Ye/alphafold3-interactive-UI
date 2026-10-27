@@ -55,6 +55,20 @@ Click **New experiment** and choose a TetR preset, another of the 13 examples,
 or **Custom input**. The molecule builder accepts proteins, DNA, RNA, ligands
 defined by CCD codes or SMILES, and repeated chains such as `A, B`.
 
+**Find a molecule**, at the top of the builder, searches every protein, DNA, and
+RNA chain in the local PDB snapshot (about 196,000 entries, grouped by identical
+sequence) and every ligand and ion in the Chemical Component Dictionary. Filter
+by type, then search by name, PDB ID, ligand code, or a pasted sequence, and
+click **Add**. With an empty search it lists the most-studied molecules of that
+type. Click a PDB ID to open that entry and add its molecules together: water is
+left out, common crystallization additives start unselected, and the 32-chain
+limit is checked before anything is added. DNA cards offer **+ Complementary
+strand**. Sequences are the PDB's canonical sequences, so modified residues
+appear as their standard parents.
+
+The catalog is built from local files the first time the explorer starts (about
+a minute) and saved as `explorer/data/molecules.sqlite`.
+
 The **AF3 JSON** editor also accepts inline alignments, templates, modifications,
 and covalent bonds. Its name and seed fields are authoritative while editing JSON.
 File-path fields are rejected; embed referenced data in the input JSON instead.
@@ -76,6 +90,10 @@ input**, which reuses its alignments and templates.
 Cancellation stops the AF3 process group, including search tools. After a server
 restart, jobs that were queued or running are marked interrupted instead of
 silently rerunning. Use **Use input again** to create a fresh job.
+
+**Delete** removes a finished, failed, or cancelled job after confirmation: its
+folder, the predictions it added to the library, and any conservation analyses
+of those predictions. Cancel an active job before deleting it.
 
 Full database searches may take hours and use substantial RAM. MPS on Apple
 Silicon is experimental; CPU inference is available as a slower alternative.

@@ -1,0 +1,43 @@
+.finder{border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px;background:#fbfcf9}
+.finder-heading,.builder-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:11px}
+.finder-heading h3{font-size:14px}
+.builder-heading{margin:4px 0 11px}
+.builder-heading .eyebrow{font-size:8px;color:#85927c}
+.finder .finder-search{display:flex;gap:0;align-items:center;border:1px solid var(--line);border-radius:7px;background:#fff;padding-left:11px;color:#8a9681}
+.finder-search input{border:0;width:100%;font-size:12px;padding:10px 10px}
+.finder-search input:focus{outline:0}
+.finder-search:focus-within{outline:2px solid #b8cfb9}
+.finder-kinds{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 10px}
+.finder-kinds button{font-size:11px;padding:6px 11px;background:#fff;border-radius:20px;color:#6f7d68}
+.finder-kinds button.selected{background:var(--green);border-color:var(--green);color:#fff}
+.finder-results{max-height:340px;overflow:auto;border-top:1px solid var(--line)}
+.finder-list-heading{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:#8a9681;font-weight:650;padding:11px 2px 5px}
+.finder-row{display:flex;align-items:center;gap:11px;padding:9px 2px;border-bottom:1px solid #edf0ea}
+.finder-row:last-child{border-bottom:0}
+.finder .finder-main{flex:1;min-width:0;display:grid;gap:3px;color:var(--ink);font-size:inherit}
+.finder-main strong{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.finder-main small{font-size:10px;color:#86917a;line-height:1.5}
+.finder-context{font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.finder-row .secondary{font-size:11px;padding:6px 12px}
+.kind-badge{flex:none;width:52px;text-align:center;font-size:9px;font-weight:650;border-radius:4px;padding:4px 0;letter-spacing:.3px}
+.kind-badge.protein{background:#e2f0f6;color:#2f7393}
+.kind-badge.dna{background:#e8f2dc;color:#56803a}
+.kind-badge.rna{background:#f8ebdd;color:#a5652a}
+.kind-badge.ligand{background:#efe7f6;color:#7a5a99}
+.kind-badge.ion{background:#f7f0d8;color:#8d7726}
+.kind-badge.entry{background:#e4ebe7;color:var(--green)}
+.pdb-link{border:0;background:transparent;padding:0 2px;font-size:10px;color:var(--green);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.finder-more{display:block;margin:6px auto 2px}
+.finder-empty{text-align:center;padding:24px 12px;font-size:12px;color:var(--muted);line-height:1.7}
+.finder-empty .spinner{display:inline-block;margin-bottom:8px}
+.finder-entry-header{display:grid;gap:3px;padding:10px 2px 4px;font-size:12px}
+.finder-entry-header .text-button{justify-self:start;padding:2px 0}
+.finder-note{margin:6px 2px 4px;font-size:10px}
+.entry-row input[type=checkbox]{flex:none;width:15px;height:15px;accent-color:var(--green)}
+.finder .entry-copies{display:flex;align-items:center;gap:6px;font-size:10px;color:#86917a}
+.entry-copies input{width:54px;padding:5px 7px;font-size:11px}
+.finder-entry-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 2px;position:sticky;bottom:0;background:#fbfcf9}
+.finder-entry-actions .primary{font-size:11px;padding:8px 14px}
+.draft-warning{color:var(--red)}
+.secondary.danger{color:var(--red)}
+.secondary.danger:hover{background:#fbefeb}

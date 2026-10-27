@@ -56,7 +56,7 @@
 
   const style = document.createElement('style');
   style.textContent = '#new-experiment,#empty-new,#import-open,#mobile-import,#conservation-open,#system-open,' +
-    '#cancel-job,#rerun-job,#rerun-conservation,#predict-prepared{display:none!important}' +
+    '#cancel-job,#rerun-job,#rerun-conservation,#predict-prepared,#delete-job{display:none!important}' +
     '.demo-notice{margin:-8px 0 26px}.demo-notice a{color:var(--green);font-weight:600}' +
     '.demo-notice small{display:block;margin-top:6px;color:var(--muted);font-size:11px}';
   document.head.append(style);

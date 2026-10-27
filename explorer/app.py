@@ -18,6 +18,7 @@ import threading
 from urllib.parse import parse_qs, unquote, urlsplit
 
 from explorer.analysis import parse_structure, viewer_cif, contacts, align_structures
+from explorer.catalog import Catalog
 from explorer.jobs import JobManager, now, save_json, validate_input
 from explorer.conservation import rate4site_binary, read_alignment, interface_comparison, DATABASE_NAMES
 
@@ -65,6 +66,9 @@ class Explorer:
         if self.jobs:
             for job in self.jobs.list():
                 self.index_job(job)
+        self.molecules = Catalog(self.db_dir, self.data_dir / 'molecules.sqlite')
+        if start_jobs:
+            self.molecules.build_in_background()
 
     def register(self, path, name, kind, **metadata):
         path = Path(path).resolve()
@@ -87,6 +91,23 @@ class Explorer:
             sample = path.parent.name if path.parent.name.startswith('seed-') else 'Best ranked'
             self.register(path, job['name'], 'prediction', job_id=job['id'], sample=sample,
                 mode=job['mode'])
+
+    def delete_job(self, job_id):
+        """Delete a job, the predictions it added, and analyses of those predictions."""
+        job = self.jobs.get(job_id)
+        with self.lock:
+            removed = [key for key, r in self.catalog.items() if r.get('job_id') == job_id]
+        dependents = [j for j in self.jobs.list() if j.get('kind') == 'conservation' and j.get('structure_id') in removed]
+        if any(j['status'] in ('queued', 'running', 'cancelling') for j in dependents):
+            raise ValueError('A conservation analysis of this prediction is still running. Cancel it first.')
+        self.jobs.delete(job_id)
+        for dependent in dependents:
+            self.jobs.delete(dependent['id'])
+        with self.lock:
+            for key in removed:
+                self.catalog.pop(key, None)
+            save_json(self.catalog_path, self.catalog)
+        return dict(deleted=[job_id] + [j['id'] for j in dependents], structures=removed, name=job['name'])
 
     def record(self, key):
         with self.lock:
@@ -360,6 +381,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(dict(structures=app.structures(), jobs=app.jobs.list(), conservation_runs=app.conservation_runs()))
         if path == '/api/status':
             return self.send(app.status())
+        if path == '/api/catalog':
+            offset = query.get('offset', ['0'])[0]
+            return self.send(app.molecules.search(query.get('q', [''])[0], query.get('kind', [''])[0], int(offset) if offset.isdigit() else 0))
+        match = re.fullmatch(r'/api/catalog/entry/([0-9A-Za-z]{4})', path)
+        if match:
+            return self.send(app.molecules.entry(match[1]))
         match = re.fullmatch(r'/api/jobs/([a-f0-9]{12})/(log|input|prepared|alignment|scores|rates|tree)', path)
         if match:
             job_id, action = match.groups()
@@ -433,9 +460,11 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(dict(structures=self.app.import_data(data)), status=201)
         if path == '/api/align':
             return self.send(align_structures(self.app.parsed(data['left']), self.app.parsed(data['right']), data['left_chain'], data['right_chain']))
-        match = re.fullmatch(r'/api/jobs/([a-f0-9]{12})/cancel', path)
+        if path == '/api/catalog/build':
+            return self.send(self.app.molecules.build_in_background(force=True))
+        match = re.fullmatch(r'/api/jobs/([a-f0-9]{12})/(cancel|delete)', path)
         if match:
-            return self.send(self.app.jobs.cancel(match[1]))
+            return self.send(self.app.jobs.cancel(match[1]) if match[2] == 'cancel' else self.app.delete_job(match[1]))
         return self.send({'error':'Endpoint not found.'}, status=404)
 
 
