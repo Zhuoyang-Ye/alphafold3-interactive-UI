@@ -1,5 +1,9 @@
 ![header](docs/header.jpg)
 
+> **New to Python, or running on a Mac?** Start with
+> [GETTING_STARTED_MACOS.md](GETTING_STARTED_MACOS.md), a step-by-step guide
+> to installing and using AlphaFold 3 and its local web explorer on Apple Silicon.
+
 # AlphaFold 3
 
 This package provides an implementation of the inference pipeline of
