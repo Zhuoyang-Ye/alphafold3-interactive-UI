@@ -1,0 +1,1496 @@
+{
+ "repo": "https://github.com/google-deepmind/alphafold3",
+ "entries": {
+  "/api/bootstrap": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9c7e922af7bb70b12f53.json"
+  },
+  "/api/state": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/314859673528f6d01c5e.json"
+  },
+  "/api/status": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/e44bc49b2e8fdbcef4d0.json"
+  },
+  "/api/structures/5349b568abe280e3": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/c32d8d79a1f269b1bd33.json"
+  },
+  "/api/structures/5349b568abe280e3/view": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": null,
+   "refs": false,
+   "file": "data/332dee0f768df8face75.cif"
+  },
+  "/api/structures/5349b568abe280e3/download": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": "1qpi.cif",
+   "refs": false,
+   "file": "data/5fca6be9d65971947f39.cif"
+  },
+  "/api/structures/5349b568abe280e3/confidence": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/2bc920b10b7b71ce2e7e.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/ce4a30894a19daa72a27.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=3.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/4f97ee5e4a1d1e25c4f3.csv"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/3c9ba88d26078c0d5272.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=4.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/76af328a24e90db13b4e.csv"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7925eb39657da3d6b942.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=4.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/a4d37e17e36afec2198a.csv"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/3ebd158f0f43bd493a96.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=5.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/96c0288443a7de1d8577.csv"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/471abe6888cc3843b007.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=6.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/97a1e8c7a42dffb928ce.csv"
+  },
+  "/api/structures/5349b568abe280e3/contacts?cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/748da1f086203158fa51.json"
+  },
+  "/api/structures/5349b568abe280e3/contacts.csv?cutoff=8.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/3af26b1b3991c2a22c5c.csv"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/034fa01a771a5abf8627.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b637f271d924d2470573.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/a393ee8bcb4a3e30179e.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/034fa01a771a5abf8627.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b637f271d924d2470573.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=3.5&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/a393ee8bcb4a3e30179e.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/171c323eff33c2933481.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/30f7c0ce8dfb11171c67.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4b881624149bbc5e635b.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/171c323eff33c2933481.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/30f7c0ce8dfb11171c67.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.0&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4b881624149bbc5e635b.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6453578e5107731ed099.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9b4fd21f8588c0fee176.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/8d34daaced4acab020e4.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6453578e5107731ed099.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9b4fd21f8588c0fee176.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=4.5&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/8d34daaced4acab020e4.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/416187c6a2fc4b19429c.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9cccbef199f566fa2642.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/1f15c1bfb7783da94885.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/416187c6a2fc4b19429c.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9cccbef199f566fa2642.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=5.0&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/1f15c1bfb7783da94885.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/2501fc04f78198b1480c.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/5759bb7fb79de3a04062.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/c6d9aae31015b9fe4dbb.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/2501fc04f78198b1480c.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/5759bb7fb79de3a04062.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=6.0&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/c6d9aae31015b9fe4dbb.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/28911193e9e1fdee7433.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0&partner=A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9bb0af60149a03c2b3c1.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0&partner=D": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4756740d1d740c515c49.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/28911193e9e1fdee7433.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0&partner=A&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/9bb0af60149a03c2b3c1.json"
+  },
+  "/api/structures/5349b568abe280e3/conservation?chain=C&cutoff=8.0&partner=D&run=41d1719cbe38": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4756740d1d740c515c49.json"
+  },
+  "/api/structures/59f8a7229b144da6": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9fc91c902a1991f9c50b.json"
+  },
+  "/api/structures/59f8a7229b144da6/view": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": null,
+   "refs": false,
+   "file": "data/4dad8e3590996f8f563d.cif"
+  },
+  "/api/structures/59f8a7229b144da6/download": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": "2trt.cif",
+   "refs": false,
+   "file": "data/6a8e3730b76d00586fb2.cif"
+  },
+  "/api/structures/59f8a7229b144da6/confidence": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/2bc920b10b7b71ce2e7e.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/deff824c57f92fd764e6.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=3.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/974a8a47b61b8275f647.csv"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9b2cb1940f221153cef9.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=4.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e4d3e706e70a6faf4d89.csv"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/149bbfd9a23d88aabd49.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=4.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/0376e167ae87d64ee892.csv"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/6bb0d0e0cd76329ea0ac.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=5.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/3b2793b89a98ba503860.csv"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/d16e1fb087179254bd94.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=6.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/3474f3c39f8751ce5878.csv"
+  },
+  "/api/structures/59f8a7229b144da6/contacts?cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/0614bc90ea3f9f094be9.json"
+  },
+  "/api/structures/59f8a7229b144da6/contacts.csv?cutoff=8.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/f3f58481dce1fd4ceb7c.csv"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b4ec464e5289978711a0.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6b290e5afd10f78a4c12.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/be9f1a3601e96665d8ab.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b4ec464e5289978711a0.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6b290e5afd10f78a4c12.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=3.5&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/be9f1a3601e96665d8ab.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/1ea3569126ddd0a6192c.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/c21706ee7ca8ff76320e.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f8cb623358b91113f79d.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/1ea3569126ddd0a6192c.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/c21706ee7ca8ff76320e.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.0&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f8cb623358b91113f79d.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/667ba5a70e6bd44296e4.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4afb4e559e91698e0f61.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/31670a988e0cc2e4afef.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/667ba5a70e6bd44296e4.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/4afb4e559e91698e0f61.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=4.5&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/31670a988e0cc2e4afef.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/a31b66003f04b819e9c0.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f3642e054b60a1fa60c4.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/68347ded260f37406b0c.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/a31b66003f04b819e9c0.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f3642e054b60a1fa60c4.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=5.0&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/68347ded260f37406b0c.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f965ee76dedc5be514c1.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/3b45be0621ca0c3cceff.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/e9b69ce2897707cfe0cd.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/f965ee76dedc5be514c1.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/3b45be0621ca0c3cceff.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=6.0&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/e9b69ce2897707cfe0cd.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6d12242127c0b67c9cbc.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0&partner=B": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6d2ec1f066e5622fc9aa.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0&partner=C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b92fac1fc96607248c58.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6d12242127c0b67c9cbc.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0&partner=B&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/6d2ec1f066e5622fc9aa.json"
+  },
+  "/api/structures/59f8a7229b144da6/conservation?chain=A&cutoff=8.0&partner=C&run=08c0eec415a8": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": true,
+   "file": "data/b92fac1fc96607248c58.json"
+  },
+  "/api/structures/90cd4c1350eceba7": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/6a14ed8592c82b52a919.json"
+  },
+  "/api/structures/90cd4c1350eceba7/view": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": null,
+   "refs": false,
+   "file": "data/efc72e158b7f55264647.cif"
+  },
+  "/api/structures/90cd4c1350eceba7/download": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": "1ubq.cif",
+   "refs": false,
+   "file": "data/5fbb4f9528b2d77ae068.cif"
+  },
+  "/api/structures/90cd4c1350eceba7/confidence": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/2bc920b10b7b71ce2e7e.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/e414f67de6f5fa690143.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=3.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/4e017ad5dab4e2562056.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=4.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/38c1f8347b95ceed4dfa.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=4.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/b63751df837d18cbc68c.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=5.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9d6d2800ff6eaefcca68.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=6.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts?cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/d76e8d456bd96b006171.json"
+  },
+  "/api/structures/90cd4c1350eceba7/contacts.csv?cutoff=8.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/90cd4c1350eceba7/conservation?chain=A&cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/adebf5ff6ba6f4baead0.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/view": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": null,
+   "refs": false,
+   "file": "data/8c159fc36a14689449e7.cif"
+  },
+  "/api/structures/4d1567cbb91fdb9b/download": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": "Runtime_check_ubiquitin_model.cif",
+   "refs": false,
+   "file": "data/032706189950b6ffc0f0.cif"
+  },
+  "/api/structures/4d1567cbb91fdb9b/confidence": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/25ab4964d2c0f0dd7f99.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/e414f67de6f5fa690143.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=3.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/4e017ad5dab4e2562056.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=4.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/38c1f8347b95ceed4dfa.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=4.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/b63751df837d18cbc68c.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=5.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9d6d2800ff6eaefcca68.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=6.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts?cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/d76e8d456bd96b006171.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/contacts.csv?cutoff=8.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/4d1567cbb91fdb9b/conservation?chain=A&cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/356eef72576408cec1c6.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/view": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": null,
+   "refs": false,
+   "file": "data/8c159fc36a14689449e7.cif"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/download": {
+   "status": 200,
+   "type": "chemical/x-mmcif",
+   "name": "Runtime_check_ubiquitin_seed-42_sample-0_model.cif",
+   "refs": false,
+   "file": "data/032706189950b6ffc0f0.cif"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/confidence": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/25ab4964d2c0f0dd7f99.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/e414f67de6f5fa690143.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=3.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/4e017ad5dab4e2562056.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=4.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/38c1f8347b95ceed4dfa.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=4.5": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/b63751df837d18cbc68c.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=5.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/9d6d2800ff6eaefcca68.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=6.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts?cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/d76e8d456bd96b006171.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/contacts.csv?cutoff=8.0": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "contacts.csv",
+   "refs": false,
+   "file": "data/e1dbe54706551b7196cd.csv"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=3.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=4.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=4.5": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=5.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=6.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/structures/da5f2ca8f0d9dd91/conservation?chain=A&cutoff=8.0": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/5adcd6fa26c73ab9eab7.json"
+  },
+  "/api/jobs/41d1719cbe38/log": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/f798416e084317cacd6e.json"
+  },
+  "/api/jobs/41d1719cbe38/input": {
+   "status": 200,
+   "type": "application/json",
+   "name": "Conservation___TetR___DNA___C_input.json",
+   "refs": false,
+   "file": "data/6f37eac4ac7b38d3206c.json"
+  },
+  "/api/jobs/41d1719cbe38/alignment": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "alignment.fasta",
+   "refs": false,
+   "file": "data/e536179f61a781c9ced6.txt"
+  },
+  "/api/jobs/41d1719cbe38/scores": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "conservation.csv",
+   "refs": false,
+   "file": "data/0f11ce7aac3c949ddc73.csv"
+  },
+  "/api/jobs/41d1719cbe38/rates": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "rate4site.txt",
+   "refs": false,
+   "file": "data/b7b72675c3a47aa4c2bd.txt"
+  },
+  "/api/jobs/41d1719cbe38/tree": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "tree.nwk",
+   "refs": false,
+   "file": "data/0c1113ae23b83e4cabca.txt"
+  },
+  "/api/jobs/08c0eec415a8/log": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/38658808085a4cfd2e51.json"
+  },
+  "/api/jobs/08c0eec415a8/input": {
+   "status": 200,
+   "type": "application/json",
+   "name": "Conservation___TetR___tetracycline___A_input.json",
+   "refs": false,
+   "file": "data/3d8ad7090f28527b2c22.json"
+  },
+  "/api/jobs/08c0eec415a8/alignment": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "alignment.fasta",
+   "refs": false,
+   "file": "data/30500682e6156bfa7e5d.txt"
+  },
+  "/api/jobs/08c0eec415a8/scores": {
+   "status": 200,
+   "type": "text/csv",
+   "name": "conservation.csv",
+   "refs": false,
+   "file": "data/4aea30014f2610dea1ff.csv"
+  },
+  "/api/jobs/08c0eec415a8/rates": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "rate4site.txt",
+   "refs": false,
+   "file": "data/bd18520b0f1c2ce69ae0.txt"
+  },
+  "/api/jobs/08c0eec415a8/tree": {
+   "status": 200,
+   "type": "text/plain",
+   "name": "tree.nwk",
+   "refs": false,
+   "file": "data/34e63e7c4e33fda22879.txt"
+  },
+  "/api/jobs/90ac569dd507/log": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/a9c288e61a389ba2dce3.json"
+  },
+  "/api/jobs/90ac569dd507/input": {
+   "status": 200,
+   "type": "application/json",
+   "name": "Runtime_check_ubiquitin_input.json",
+   "refs": false,
+   "file": "data/bd1738c4be38bc155396.json"
+  },
+  "/api/jobs/90ac569dd507/prepared": {
+   "status": 200,
+   "type": "application/json",
+   "name": "Runtime_check_ubiquitin_prepared.json",
+   "refs": false,
+   "file": "data/bd1738c4be38bc155396.json"
+  },
+  "align|5349b568abe280e3|5349b568abe280e3|C|C": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/1a12d118fa183bbdf2df.json"
+  },
+  "align|5349b568abe280e3|59f8a7229b144da6|C|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|5349b568abe280e3|90cd4c1350eceba7|C|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|5349b568abe280e3|4d1567cbb91fdb9b|C|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|5349b568abe280e3|da5f2ca8f0d9dd91|C|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|59f8a7229b144da6|5349b568abe280e3|A|C": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|59f8a7229b144da6|59f8a7229b144da6|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/0140a3b958628d640fc5.json"
+  },
+  "align|59f8a7229b144da6|90cd4c1350eceba7|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|59f8a7229b144da6|4d1567cbb91fdb9b|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|59f8a7229b144da6|da5f2ca8f0d9dd91|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|90cd4c1350eceba7|5349b568abe280e3|A|C": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|90cd4c1350eceba7|59f8a7229b144da6|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|90cd4c1350eceba7|90cd4c1350eceba7|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/70d3a2cfc2986a8aae78.json"
+  },
+  "align|90cd4c1350eceba7|4d1567cbb91fdb9b|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/c7caf458aebdd35d52d4.json"
+  },
+  "align|90cd4c1350eceba7|da5f2ca8f0d9dd91|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/c7caf458aebdd35d52d4.json"
+  },
+  "align|4d1567cbb91fdb9b|5349b568abe280e3|A|C": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|4d1567cbb91fdb9b|59f8a7229b144da6|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|4d1567cbb91fdb9b|90cd4c1350eceba7|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/354978bf01b25adf3c9e.json"
+  },
+  "align|4d1567cbb91fdb9b|4d1567cbb91fdb9b|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/eb3c0ab8c44147cab1ca.json"
+  },
+  "align|4d1567cbb91fdb9b|da5f2ca8f0d9dd91|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/eb3c0ab8c44147cab1ca.json"
+  },
+  "align|da5f2ca8f0d9dd91|5349b568abe280e3|A|C": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|da5f2ca8f0d9dd91|59f8a7229b144da6|A|A": {
+   "status": 400,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/7480f5861d134363a82a.json"
+  },
+  "align|da5f2ca8f0d9dd91|90cd4c1350eceba7|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/354978bf01b25adf3c9e.json"
+  },
+  "align|da5f2ca8f0d9dd91|4d1567cbb91fdb9b|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/eb3c0ab8c44147cab1ca.json"
+  },
+  "align|da5f2ca8f0d9dd91|da5f2ca8f0d9dd91|A|A": {
+   "status": 200,
+   "type": "application/json",
+   "name": null,
+   "refs": false,
+   "file": "data/eb3c0ab8c44147cab1ca.json"
+  }
+ }
+}

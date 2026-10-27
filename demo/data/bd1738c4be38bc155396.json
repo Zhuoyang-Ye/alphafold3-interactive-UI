@@ -1,0 +1,1 @@
+{"dialect":"alphafold3","version":4,"name":"Runtime_check_ubiquitin","sequences":[{"protein":{"id":"A","sequence":"MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG","modifications":[],"unpairedMsa":"","pairedMsa":"","templates":[],"description":"Human ubiquitin, 76 residues (UniProt P0CG48)"}}],"modelSeeds":[42],"bondedAtomPairs":null,"userCCD":null}
