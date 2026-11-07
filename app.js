@@ -203,14 +203,11 @@ function getPreferredMode() {
 function applyUIMode(mode) {
   state.uiMode = mode;
   localStorage.setItem('af3_ui_mode', mode);
+  document.documentElement.setAttribute('data-mode', mode);
   $('mode-explorer')?.classList.toggle('selected', mode === 'explorer');
   $('mode-scientist')?.classList.toggle('selected', mode === 'scientist');
-  if (mode === 'explorer') {
-    $('story-card')?.classList.remove('hidden');
-    $('advanced-panels-section')?.classList.add('hidden');
-  } else {
-    $('story-card')?.classList.remove('hidden');
-    $('advanced-panels-section')?.classList.remove('hidden');
+  if (state.viewer) {
+    requestAnimationFrame(() => state.viewer.resize());
   }
 }
 function toggleMode() {
