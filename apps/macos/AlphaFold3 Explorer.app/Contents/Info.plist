@@ -9,9 +9,9 @@
     <key>CFBundleIdentifier</key>
     <string>com.zhuoyangye.alphafold3.explorer</string>
     <key>CFBundleVersion</key>
-    <string>2.0.0</string>
+    <string>2.1.0</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.0.0</string>
+    <string>2.1.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>
@@ -20,12 +20,21 @@
     <string>AlphaFold3 Explorer</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
     <key>LSMinimumSystemVersion</key>
     <string>12.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSRequiresAquaSystemAppearance</key>
     <false/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>

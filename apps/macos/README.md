@@ -27,5 +27,5 @@ Native macOS desktop application for **AlphaFold 3 · Interaction Studio**.
 To compile the native app bundle from Swift source:
 
 ```bash
-swiftc -parse-as-library -framework Cocoa -framework WebKit apps/macos/AppDelegate.swift -o "apps/macos/AlphaFold3 Explorer.app/Contents/MacOS/AlphaFold3 Explorer"
+swiftc -framework Cocoa -framework WebKit apps/macos/main.swift -o "apps/macos/AlphaFold3 Explorer.app/Contents/MacOS/AlphaFold3 Explorer"
 ```
