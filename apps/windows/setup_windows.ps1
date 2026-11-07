@@ -22,16 +22,25 @@ if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
     Write-Host "[1/4] 'uv' is already installed." -ForegroundColor Green
 }
 
-# 2. Sync dependencies
-$RepoRoot = Resolve-Path "$PSScriptRoot\..\.."
-Set-Location $RepoRoot
-
-Write-Host "[2/4] Setting up Python 3.12 and dependencies via uv sync..." -ForegroundColor Yellow
-& uv sync
-
-# 3. Build chemistry dictionary
-Write-Host "[3/4] Preparing chemistry components dictionary (build_data)..." -ForegroundColor Yellow
-& uv run build_data
+# 2. Check for AlphaFold repository root
+$RepoCandidate = Resolve-Path "$PSScriptRoot\..\.." -ErrorAction SilentlyContinue
+$HasFullRepo = $false
+if ($RepoCandidate -and (Test-Path (Join-Path $RepoCandidate.Path "pyproject.toml"))) {
+    $HasFullRepo = $true
+    Set-Location $RepoCandidate.Path
+    Write-Host "[2/4] Setting up Python 3.12 and dependencies via uv sync..." -ForegroundColor Yellow
+    & uv sync
+    Write-Host "[3/4] Preparing chemistry components dictionary (build_data)..." -ForegroundColor Yellow
+    & uv run build_data
+} else {
+    Write-Host "[2/4] Standalone studio mode detected. Ensuring Python 3.12 is available..." -ForegroundColor Yellow
+    try {
+        & uv python install 3.12
+    } catch {
+        Write-Host "[Notice] Standard Python can also run AlphaFold 3 Explorer." -ForegroundColor Yellow
+    }
+    Write-Host "[3/4] Standalone studio ready (no full repo build needed)." -ForegroundColor Green
+}
 
 # 4. Create Desktop Shortcut
 Write-Host "[4/4] Creating Desktop Shortcut..." -ForegroundColor Yellow

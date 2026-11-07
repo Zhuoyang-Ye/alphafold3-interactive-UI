@@ -1,3 +1,7 @@
+Set fso = CreateObject("Scripting.FileSystemObject")
+scriptDir = fso.GetParentFolderName(WScript.ScriptFullName)
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.Run chr(34) & WshShell.CurrentDirectory & "\AlphaFold3_Explorer.bat" & Chr(34), 0
+WshShell.CurrentDirectory = scriptDir
+WshShell.Run Chr(34) & scriptDir & "\AlphaFold3_Explorer.bat" & Chr(34), 1
 Set WshShell = Nothing
+Set fso = Nothing

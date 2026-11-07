@@ -158,7 +158,7 @@ class Explorer:
         return dict(db_dir=str(self.db_dir), model_dir=str(self.model_dir), data_dir=str(self.data_dir),
             databases=files, database_ready=all(f['present'] for f in files),
             weights_ready=(self.model_dir/'af3.bin').is_file(), tools=tools, cpu_count=os.cpu_count(),
-            backend_default='mps' if os.uname().sysname == 'Darwin' else 'gpu',
+            backend_default='mps' if sys.platform == 'darwin' else 'gpu',
             rate4site=rate4site_binary(self.data_dir),
             note='Presence check only; database checksums are not verified.')
 

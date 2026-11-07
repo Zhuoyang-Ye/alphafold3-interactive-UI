@@ -1,0 +1,241 @@
+/* =====================================================================
+   Evolutionary Conservation Stylesheet
+   Updated for dark/light themes and comfortable typography scale
+   ===================================================================== */
+
+.conservation-panel { margin: 18px 0 16px; }
+.conservation-panel .panel-header button { font-size: 13px; padding: 8px 14px; }
+.conservation-controls {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  padding: 0 24px 20px;
+  flex-wrap: wrap;
+}
+.conservation-controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.conservation-controls label:first-child { width: 110px; }
+.conservation-controls label:nth-child(2) { flex: 1; min-width: 160px; }
+.conservation-controls select {
+  font-size: 13px;
+  width: 100%;
+  padding: 9px 10px;
+}
+.conservation-controls button {
+  font-size: 13px;
+  padding: 9px 14px;
+}
+.conservation-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 0 24px 20px;
+}
+.conservation-metrics strong {
+  font-size: 24px;
+  font-weight: 700;
+  display: block;
+}
+.conservation-metrics small {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.conservation-source-line {
+  padding: 0 24px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.conservation-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.conservation-gradient {
+  height: 10px;
+  width: 140px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #508b78, #eef2da, #a6498c);
+}
+.conservation-chart-wrap { padding: 0 20px 8px; }
+.conservation-chart {
+  width: 100%;
+  height: 160px;
+  cursor: crosshair;
+}
+.conservation-jump {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 24px 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.conservation-jump input {
+  width: 85px;
+  font-size: 13px;
+  padding: 7px 10px;
+}
+.conservation-jump button {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.conservation-readout {
+  margin: 0 24px 18px;
+  padding: 14px 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.8;
+  min-height: 64px;
+}
+.conservation-interface {
+  margin: 0 24px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+}
+.conservation-interface h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.conservation-interface label {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.conservation-interface select {
+  padding: 7px 10px;
+  font-size: 13px;
+}
+.conservation-bar-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 50px;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.conservation-bar {
+  height: 10px;
+  background: var(--surface-alt);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.conservation-bar span {
+  display: block;
+  height: 100%;
+  background: #ae6da0;
+  border-radius: 4px;
+}
+.conservation-bar-row:nth-of-type(2) .conservation-bar span { background: #7f9d86; }
+.conservation-interface-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 14px;
+}
+.conservation-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 0 24px 20px;
+}
+.conservation-warnings { padding: 0 24px 16px; }
+.conservation-warnings p {
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  background: #fef9c3;
+  color: #854d0e;
+  font-size: 12px;
+  line-height: 1.7;
+  border-radius: 6px;
+}
+.conservation-homologues {
+  margin: 0 24px 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.conservation-homologues summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--green);
+  padding: 8px 0;
+}
+.conservation-homologues table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.conservation-homologues td, .conservation-homologues th {
+  text-align: left;
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.conservation-dialog { width: min(780px, 94vw); }
+.conservation-dialog .dialog-body {
+  overflow: auto;
+  max-height: 68vh;
+}
+.conservation-query {
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+.conservation-query code {
+  display: block;
+  color: var(--green);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  margin-top: 6px;
+}
+.conservation-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.conservation-form-grid label, .conservation-parameters label,
+#conservation-search-fields label, #conservation-prepared-fields label, #conservation-upload-fields > label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.conservation-parameters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 22px 0 16px;
+}
+.conservation-parameters input, .conservation-parameters select {
+  width: 100%;
+  font-size: 13px;
+}
+.conservation-parameters small {
+  font-size: 11px;
+  color: var(--muted);
+}
