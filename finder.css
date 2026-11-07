@@ -1,0 +1,154 @@
+/* =====================================================================
+   Molecule Finder Stylesheet
+   Updated for dark/light themes and comfortable typography scale
+   ===================================================================== */
+
+.finder {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  background: var(--surface-alt);
+}
+.finder-heading, .builder-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.finder-heading h3 { font-size: 16px; font-weight: 700; }
+.builder-heading { margin: 8px 0 12px; }
+.builder-heading .eyebrow {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+}
+.finder .finder-search {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding-left: 12px;
+  color: var(--muted);
+}
+.finder-search input {
+  border: 0;
+  width: 100%;
+  font-size: 14px;
+  padding: 11px 12px;
+  background: transparent;
+}
+.finder-search input:focus { outline: 0; }
+.finder-search:focus-within {
+  outline: 2px solid var(--green);
+  border-color: var(--green);
+}
+.finder-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 12px;
+}
+.finder-kinds button {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  background: var(--surface);
+  border-radius: 20px;
+  color: var(--ink-secondary);
+}
+.finder-kinds button.selected {
+  background: var(--green);
+  border-color: var(--green);
+  color: #ffffff;
+}
+.finder-results {
+  max-height: 360px;
+  overflow: auto;
+  border-top: 1px solid var(--line);
+}
+.finder-list-heading {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 12px 4px 6px;
+}
+.finder-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 6px;
+  border-bottom: 1px solid var(--line-light);
+}
+.finder-row:last-child { border-bottom: 0; }
+.finder .finder-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  color: var(--ink);
+  font-size: inherit;
+}
+.finder-main strong {
+  font-size: 14px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.finder-main small {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.finder-context {
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.finder-row .secondary {
+  font-size: 12px;
+  padding: 7px 14px;
+}
+.kind-badge {
+  flex: none;
+  width: 58px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 5px 0;
+  letter-spacing: 0.3px;
+}
+.kind-badge.protein { background: #e0f2fe; color: #0369a1; }
+.kind-badge.dna { background: #dcfce7; color: #15803d; }
+.kind-badge.rna { background: #ffedd5; color: #c2410c; }
+.kind-badge.ligand { background: #f3e8ff; color: #7e22ce; }
+.kind-badge.ion { background: #fef9c3; color: #a16207; }
+.kind-badge.entry { background: var(--green-light); color: var(--green); }
+.pdb-link {
+  border: 0;
+  background: transparent;
+  padding: 0 4px;
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.finder-more { display: block; margin: 8px auto 4px; }
+.finder-empty {
+  text-align: center;
+  padding: 28px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.finder-empty .spinner { display: inline-block; margin-bottom: 10px; }
+.draft-warning { color: var(--red); }

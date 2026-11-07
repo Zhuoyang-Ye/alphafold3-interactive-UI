@@ -48,7 +48,9 @@ function makeViewer(id) {
   const element=$(id); element.innerHTML='';
   if(!window.$3Dmol) throw new Error('The local 3D viewer did not load. Reload the page.');
   let viewer;
-  try {viewer=$3Dmol.createViewer(element,{backgroundColor:'#111f24',antialias:true});}
+  const isDark = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark';
+  const bg = isDark ? '#081014' : '#0f1a20';
+  try {viewer=$3Dmol.createViewer(element,{backgroundColor:bg,antialias:true});}
   catch(error) {element.innerHTML='<div class="viewer-loading">3D rendering needs WebGL enabled in your browser.</div>'; throw error;}
   new ResizeObserver(()=>viewer.resize()).observe(element);
   return viewer;
@@ -69,6 +71,171 @@ function styleViewer(viewer, detail, {style='cartoon',color='chain',hidden=new S
   }
   viewer.render();
 }
+const STORIES = {
+  tetr_homodimer: {
+    title: 'TetR · Bacterial Antibiotic Shield',
+    tag: 'Bacterial Defense',
+    text: 'You are viewing TetR (Tetracycline Repressor) in its resting state. Bacteria use two connected copies of this protein to sense antibiotic drugs. Notice the two large helical arms ready to clamp down on bacterial DNA.'
+  },
+  tetr_dimer_dna: {
+    title: 'TetR · Clamped onto DNA',
+    tag: 'Genetic Switch',
+    text: 'Here, the TetR protein pair has gripped a double strand of DNA. By holding onto the DNA like a molecular clamp, it physically blocks the cell from reading antibiotic resistance genes until medicine is actually present.'
+  },
+  tetr_dimer_tetracycline: {
+    title: 'TetR · Disarmed by Antibiotic Drug',
+    tag: 'Drug Binding',
+    text: 'Look into the binding pocket: a tetracycline antibiotic molecule is nestled deep inside. The drug pushes the protein jaws outward, forcing TetR to let go of DNA and letting bacteria turn on their defense pumps.'
+  },
+  ubiquitin_monomer: {
+    title: 'Ubiquitin · Cellular Recycling Barcode',
+    tag: 'Nobel Prize Discovery',
+    text: 'A compact 76-amino-acid protein found throughout all animals and plants. When a cellular machine becomes worn out, ubiquitin molecules are attached to it like a disposal tag, sending it to the cellular recycling shredder.'
+  },
+  barnase_barstar: {
+    title: 'Barnase + Barstar · Molecular Lock & Key',
+    tag: 'Tightest Binding',
+    text: 'One of nature\'s strongest protein handshakes. Barnase is a lethal bacterial toxin that cuts RNA, and Barstar is its protective antidote shield that locks into place with extraordinary speed to prevent self-destruction.'
+  },
+  u1a_rna_hairpin: {
+    title: 'U1A + RNA · Genetic Decoder',
+    tag: 'RNA Recognition',
+    text: 'Shows how human proteins recognize specific genetic instructions in RNA. The U1A protein binds an RNA hairpin loop, guiding cellular machinery during gene splicing.'
+  },
+  streptavidin_biotin_smiles: {
+    title: 'Streptavidin + Biotin · Molecular Superglue',
+    tag: 'Biotechnology Velcro',
+    text: 'The strongest non-covalent bond known in nature. Biotin (vitamin B7) docks into a deep pocket of Streptavidin so tightly that scientists use this pair as universal molecular superglue in medical diagnostic tests.'
+  }
+};
+
+function updateStoryCard(detail) {
+  const card = $('story-card');
+  if (!card) return;
+  const match = STORIES[detail.id] || Object.entries(STORIES).find(([k]) => detail.name.toLowerCase().includes(k.replace(/_/g, ' ')))?.[1];
+  if (match) {
+    $('story-heading').textContent = match.title;
+    $('story-tag').textContent = match.tag;
+    $('story-text').textContent = match.text;
+  } else {
+    const kinds = [...new Set(detail.chains.map(c => shortKind(c.kind)))];
+    $('story-heading').textContent = detail.name;
+    $('story-tag').textContent = detail.predicted ? 'AF3 Prediction' : 'Reference Structure';
+    $('story-text').textContent = `This structure contains ${fmt(detail.atom_count)} heavy atoms across ${detail.chains.length} chains (${kinds.join(', ')}). Look at the contacts on the right to see where individual chains touch and interact.`;
+  }
+}
+
+let isSpinning = false;
+let spinReqId = null;
+function toggleSpin() {
+  isSpinning = !isSpinning;
+  const btn = $('quick-spin');
+  if (btn) btn.classList.toggle('active-action', isSpinning);
+  if (isSpinning) {
+    function step() {
+      if (!isSpinning || !state.viewer) return;
+      state.viewer.rotate(0.5, 'y');
+      state.viewer.render();
+      spinReqId = requestAnimationFrame(step);
+    }
+    spinReqId = requestAnimationFrame(step);
+  } else if (spinReqId) {
+    cancelAnimationFrame(spinReqId);
+    spinReqId = null;
+  }
+}
+
+function focusInterface() {
+  if (!state.viewer) return;
+  if (state.contacts && state.contacts.rows && state.contacts.rows.length) {
+    const contact = state.contacts.rows[0];
+    highlightContact(contact, true);
+  } else {
+    state.viewer.zoomTo();
+    state.viewer.render();
+  }
+}
+
+function toggleSurface() {
+  state.style = (state.style === 'cartoon') ? 'sphere' : 'cartoon';
+  document.querySelectorAll('[data-style]').forEach(b => b.classList.toggle('selected', b.dataset.style === state.style));
+  const btn = $('quick-surface');
+  if (btn) btn.classList.toggle('active-action', state.style === 'sphere');
+  applyMainStyle();
+}
+
+function cycleColor() {
+  const current = $('color-mode').value;
+  const next = (current === 'chain' && state.detail?.predicted) ? 'confidence' : 'chain';
+  state.color = next;
+  $('color-mode').value = next;
+  applyMainStyle();
+}
+
+function getPreferredTheme() {
+  const saved = localStorage.getItem('af3_theme');
+  if (saved) return saved;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('af3_theme', theme);
+  const icon = theme === 'dark' ? '☀️' : '🌙';
+  const label = theme === 'dark' ? 'Light' : 'Dark';
+  if ($('theme-icon')) $('theme-icon').textContent = icon;
+  if ($('theme-label')) $('theme-label').textContent = label;
+  document.querySelectorAll('.theme-icon-indicator').forEach(el => el.textContent = icon);
+  if (state.viewer) {
+    const bg = theme === 'dark' ? '#081014' : '#0f1a20';
+    state.viewer.setBackgroundColor(bg);
+    state.viewer.render();
+  }
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+window.toggleAppTheme = toggleTheme;
+
+function getPreferredMode() {
+  return localStorage.getItem('af3_ui_mode') || 'explorer';
+}
+function applyUIMode(mode) {
+  state.uiMode = mode;
+  localStorage.setItem('af3_ui_mode', mode);
+  $('mode-explorer')?.classList.toggle('selected', mode === 'explorer');
+  $('mode-scientist')?.classList.toggle('selected', mode === 'scientist');
+  if (mode === 'explorer') {
+    $('story-card')?.classList.remove('hidden');
+    $('advanced-panels-section')?.classList.add('hidden');
+  } else {
+    $('story-card')?.classList.remove('hidden');
+    $('advanced-panels-section')?.classList.remove('hidden');
+  }
+}
+function toggleMode() {
+  applyUIMode(state.uiMode === 'explorer' ? 'scientist' : 'explorer');
+}
+window.toggleAppMode = toggleMode;
+
+function openLocalPortal(tab = 'apps') {
+  $('portal-dialog').showModal();
+  switchPortalTab(tab);
+}
+window.openLocalPortal = openLocalPortal;
+
+function switchPortalTab(tab) {
+  ['apps', 'data', 'weights'].forEach(t => {
+    $('tab-' + t)?.classList.toggle('selected', t === tab);
+    $('tab-' + t)?.setAttribute('aria-selected', t === tab);
+    $('pane-' + t)?.classList.toggle('hidden', t !== tab);
+  });
+}
+function openQuickGuide() {
+  $('guide-dialog').showModal();
+}
+window.openQuickGuide = openQuickGuide;
+
 function applyMainStyle() {
   if(!state.viewer||!state.detail) return;
   state.viewer.removeAllLabels();state.viewer.removeAllShapes();
@@ -98,6 +265,7 @@ async function loadStructure(id) {
   $('color-mode').querySelector('[value="confidence"]').disabled=!detail.predicted;
   if(!detail.predicted) {state.color='chain';$('color-mode').value='chain';}
   renderStats();
+  updateStoryCard(detail);
   if(!state.viewer) state.viewer=makeViewer('main-viewer');
   state.viewer.removeAllModels();state.viewer.removeAllLabels();state.viewer.removeAllShapes();
   state.viewer.addModel(cif,'cif',{doAssembly:false,keepH:false});
@@ -223,16 +391,18 @@ function loadDraft(raw,presetId=null) {
 }
 function openExperiment(raw=null) {
   loadDraft(raw||state.presets.find(p=>p.id==='tetr_homodimer')?.input||{name:'My experiment',sequences:[{protein:{id:'A',sequence:''}}],modelSeeds:[42],dialect:'alphafold3',version:4},raw?null:'tetr_homodimer');
-  $('run-mode').value='full';modeNote();$('experiment-dialog').showModal();
+  $('run-mode').value='full';modeNote();$('experiment-dialog').showModal();resetFinder();
 }
 function renderMolecules() {
   $('molecule-list').innerHTML=state.draft.sequences.map((entry,i)=>{
     const [kind,m]=Object.entries(entry)[0];const ids=Array.isArray(m.id)?m.id.join(', '):m.id;
     const content=kind==='ligand'?(m.smiles||m.ccdCodes?.join(', ')||''):(m.sequence||'');
-    return `<div class="molecule-card" data-molecule="${i}"><div class="molecule-top"><select class="molecule-type" aria-label="Molecule ${i+1} type">${['protein','dna','rna','ligand'].map(k=>`<option value="${k}" ${kind===k?'selected':''}>${{protein:'Protein',dna:'DNA',rna:'RNA',ligand:'Ligand / ion'}[k]}</option>`).join('')}</select><span class="chain-hint">Chain IDs</span><input class="molecule-ids" value="${esc(ids)}" placeholder="A, B" aria-label="Molecule ${i+1} chain IDs"><button class="remove-molecule" aria-label="Remove molecule ${i+1}">×</button></div><label class="sr-only">${kind==='ligand'?'Ligand definition':'Sequence'}</label><textarea class="molecule-sequence" aria-label="Molecule ${i+1} ${kind==='ligand'?'definition':'sequence'}" spellcheck="false" placeholder="${kind==='ligand'?'CCD code (e.g. TAC), or select SMILES':'Paste the sequence (one-letter codes)'}">${esc(content)}</textarea><div class="molecule-caption"><span>${kind==='ligand'?'Ligand definition':`${content.length} residues · ${Array.isArray(m.id)?m.id.length:1} chain(s)`}${m.modifications?.length?' · Modifications preserved':''}</span>${kind==='ligand'?`<select class="ligand-format" aria-label="Ligand format"><option value="ccd" ${!m.smiles?'selected':''}>CCD codes</option><option value="smiles" ${m.smiles?'selected':''}>SMILES</option></select>`:''}</div></div>`;
+    return `<div class="molecule-card" data-molecule="${i}"><div class="molecule-top"><select class="molecule-type" aria-label="Molecule ${i+1} type">${['protein','dna','rna','ligand'].map(k=>`<option value="${k}" ${kind===k?'selected':''}>${{protein:'Protein',dna:'DNA',rna:'RNA',ligand:'Ligand / ion'}[k]}</option>`).join('')}</select><span class="chain-hint">Chain IDs</span><input class="molecule-ids" value="${esc(ids)}" placeholder="A, B" aria-label="Molecule ${i+1} chain IDs"><button class="remove-molecule" aria-label="Remove molecule ${i+1}">×</button></div><label class="sr-only">${kind==='ligand'?'Ligand definition':'Sequence'}</label><textarea class="molecule-sequence" aria-label="Molecule ${i+1} ${kind==='ligand'?'definition':'sequence'}" spellcheck="false" placeholder="${kind==='ligand'?'CCD code (e.g. TAC), or select SMILES':'Paste the sequence (one-letter codes)'}">${esc(content)}</textarea><div class="molecule-caption"><span>${kind==='ligand'?'Ligand definition':`${content.length} residues · ${Array.isArray(m.id)?m.id.length:1} chain(s)`}${m.modifications?.length?' · Modifications preserved':''}</span>${kind==='ligand'?`<select class="ligand-format" aria-label="Ligand format"><option value="ccd" ${!m.smiles?'selected':''}>CCD codes</option><option value="smiles" ${m.smiles?'selected':''}>SMILES</option></select>`:''}${kind==='dna'?'<button class="text-button add-complement">+ Complementary strand</button>':''}</div></div>`;
   }).join('');
+  renderDraftSummary();
   $('molecule-list').querySelectorAll('.molecule-card').forEach(card=>{
     const i=Number(card.dataset.molecule);
+    const complement=card.querySelector('.add-complement');if(complement)complement.onclick=()=>{try{addComplement(i);}catch(error){toast(error.message);}};
     card.querySelector('.molecule-type').onchange=()=>{syncBuilder();const kind=card.querySelector('.molecule-type').value;const previous=Object.values(state.draft.sequences[i])[0];state.draft.sequences[i]={[kind]:{id:previous.id,...(kind==='ligand'?{ccdCodes:[]}:{sequence:''})}};renderMolecules();};
     card.querySelector('.remove-molecule').onclick=()=>{syncBuilder();state.draft.sequences.splice(i,1);renderMolecules();};
   });
@@ -282,9 +452,77 @@ async function submitJob() {
 }
 function renderJobs() {
   $('job-count').textContent=state.jobs.filter(j=>['running','queued','cancelling'].includes(j.status)).length||state.jobs.length;
-  $('job-list').innerHTML=state.jobs.length?state.jobs.map(j=>`<button class="job-card ${state.job===j.id?'selected':''}" data-job="${j.id}"><div class="job-card-header"><strong>${esc(j.name)}</strong><span class="status-tag ${esc(j.status)}">${esc(j.status)}</span></div><p>${esc(modeName(j.mode))}<br>${new Date(j.created_at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · ${j.backend.toUpperCase()}</p></button>`).join(''):'<div class="empty">Your experiments will appear here.<br>Start with a small protein or a TetR example.</div>';
-  $('job-list').querySelectorAll('button').forEach(b=>b.onclick=()=>selectJob(b.dataset.job).catch(e=>toast(e.message)));
+  if(!state.jobs.some(j=>j.id===state.swipedJob))state.swipedJob=null;
+  $('job-list').innerHTML=state.jobs.length?state.jobs.map(j=>{
+    const open=state.swipedJob===j.id,active=['running','queued','cancelling'].includes(j.status);
+    return `<div class="job-swipe ${open?'open':''}" data-swipe="${j.id}"><button class="job-swipe-delete" data-delete="${j.id}" tabindex="${open?0:-1}" aria-label="Delete ${esc(j.name)}">Delete</button><button class="job-card ${state.job===j.id?'selected':''}" data-job="${j.id}" ${active?'data-active="1"':'aria-keyshortcuts="ArrowLeft"'}><div class="job-card-header"><strong>${esc(j.name)}</strong><span class="status-tag ${esc(j.status)}">${esc(j.status)}</span></div><p>${esc(modeName(j.mode))}<br>${new Date(j.created_at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · ${j.backend.toUpperCase()}</p></button></div>`;
+  }).join('')+'<p class="job-list-hint">Swipe an experiment left to delete it.</p>':'<div class="empty">Your experiments will appear here.<br>Start with a small protein or a TetR example.</div>';
+  $('job-list').querySelectorAll('.job-card').forEach(b=>b.onclick=()=>{
+    if(state.swipeClick)return;
+    const wasOpen=state.swipedJob===b.dataset.job;
+    if(state.swipedJob)setSwipe(null);
+    if(!wasOpen)selectJob(b.dataset.job).catch(e=>toast(e.message));
+  });
+  $('job-list').querySelectorAll('.job-swipe-delete').forEach(b=>b.onclick=()=>{const job=state.jobs.find(j=>j.id===b.dataset.delete);if(job)deleteJob(job).catch(e=>toast(e.message));});
   if(!state.job&&state.jobs.length) selectJob(state.jobs[0].id).catch(e=>toast(e.message));
+}
+const SWIPE_WIDTH=88;
+function setSwipe(id) {
+  state.swipedJob=id;
+  document.querySelectorAll('.job-swipe').forEach(row=>{
+    const open=row.dataset.swipe===id;
+    row.classList.toggle('open',open);row.querySelector('.job-swipe-delete').tabIndex=open?0:-1;
+    row.querySelector('.job-card').style.transform='';
+  });
+}
+// Swipe a finished job left (drag, touch, or two-finger trackpad swipe) to reveal Delete.
+function setupJobSwipe() {
+  const list=$('job-list');let drag=null,wheel={id:null,total:0,timer:null};
+  list.addEventListener('pointerdown',e=>{
+    const card=e.target.closest('.job-card');
+    if(card&&!card.dataset.active&&e.button===0)drag={card,id:card.dataset.job,pointer:e.pointerId,x:e.clientX,y:e.clientY,
+      base:state.swipedJob===card.dataset.job?-SWIPE_WIDTH:0,offset:0,moving:false};
+  });
+  list.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.pointer)return;
+    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(!drag.moving) {
+      if(Math.abs(dy)>8&&Math.abs(dy)>Math.abs(dx)){drag=null;return;}
+      if(Math.abs(dx)<8)return;
+      drag.moving=true;drag.card.setPointerCapture(e.pointerId);drag.card.classList.add('dragging');
+    }
+    drag.offset=Math.max(-SWIPE_WIDTH*1.4,Math.min(0,drag.base+dx));
+    drag.card.style.transform=`translateX(${drag.offset}px)`;
+  });
+  const end=e=>{
+    if(!drag||e.pointerId!==drag.pointer)return;
+    if(drag.moving) {
+      drag.card.classList.remove('dragging');
+      state.swipeClick=true;setTimeout(()=>{state.swipeClick=false;});
+      setSwipe(drag.offset<-SWIPE_WIDTH/2?drag.id:null);
+    }
+    drag=null;
+  };
+  list.addEventListener('pointerup',end);list.addEventListener('pointercancel',end);
+  list.addEventListener('wheel',e=>{
+    const card=e.target.closest('.job-card');
+    if(!card||Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
+    e.preventDefault();
+    if(card.dataset.active)return;
+    if(wheel.id!==card.dataset.job)wheel={id:card.dataset.job,total:0,timer:null};
+    wheel.total+=e.deltaX;clearTimeout(wheel.timer);wheel.timer=setTimeout(()=>{wheel.total=0;},250);
+    if(wheel.total>40&&state.swipedJob!==wheel.id){setSwipe(wheel.id);wheel.total=0;}
+    else if(wheel.total<-40&&state.swipedJob===wheel.id){setSwipe(null);wheel.total=0;}
+  },{passive:false});
+  list.addEventListener('keydown',e=>{
+    const card=e.target.closest('.job-card');
+    if(card&&!card.dataset.active&&['ArrowLeft','Delete','Backspace'].includes(e.key)) {
+      e.preventDefault();setSwipe(card.dataset.job);card.parentElement.querySelector('.job-swipe-delete').focus();
+    } else if(state.swipedJob&&(e.key==='Escape'||(e.key==='ArrowRight'&&card))) {
+      e.preventDefault();const id=state.swipedJob;setSwipe(null);list.querySelector(`.job-card[data-job="${id}"]`)?.focus();
+    }
+  });
+  document.addEventListener('pointerdown',e=>{if(state.swipedJob&&!e.target.closest('.job-swipe.open'))setSwipe(null);});
 }
 function phaseFromLog(log, job) {
   if(job.status!=='running')return job.stage;
@@ -319,6 +557,29 @@ function renderJobDetail(job, log) {
   if($('predict-prepared'))on('predict-prepared','click',async()=>{const next=await api('/api/jobs',{prepared_job:job.id,mode:'inference',backend:job.backend,samples:job.samples,recycles:job.recycles});await refresh();await selectJob(next.id);});
   const el=$('job-log');el.scrollTop=el.scrollHeight;
 }
+// An in-page dialog rather than window.confirm, which embedded browsers can block silently.
+function confirmAction(title,text,action) {
+  return new Promise(resolve=>{
+    const dialog=$('confirm-dialog');
+    $('confirm-title').textContent=title;$('confirm-message').textContent=text;$('confirm-ok').textContent=action;
+    $('confirm-ok').onclick=()=>{resolve(true);dialog.close();};
+    $('confirm-cancel').onclick=()=>dialog.close();
+    dialog.onclose=()=>resolve(false);
+    dialog.showModal();$('confirm-cancel').focus();
+  });
+}
+async function deleteJob(job) {
+  const structures=state.structures.filter(r=>r.job_id===job.id);
+  const analyses=state.jobs.filter(j=>j.kind==='conservation'&&structures.some(r=>r.id===j.structure_id));
+  const effects=[structures.length?`${structures.length} predicted structure${structures.length===1?'':'s'} will be removed from your library.`:'',
+    analyses.length?`${analyses.length} conservation analys${analyses.length===1?'is':'es'} of ${structures.length===1?'it':'them'} will also be deleted.`:''].filter(Boolean).join(' ');
+  if(!await confirmAction(`Delete “${job.name}”?`,`Its input, log, and output files will be permanently removed from this Mac.${effects?'\n\n'+effects:''}`,'Delete')){setSwipe(null);return;}
+  await api(`/api/jobs/${job.id}/delete`,{});
+  state.job=null;state.swipedJob=null;
+  await refresh();renderJobs();
+  if(!state.jobs.length){$('job-detail').innerHTML=state.emptyJobDetail;on('empty-new','click',()=>openExperiment());}
+  toast(`Deleted “${job.name}”.`);
+}
 async function refresh() {
   const data=await api('/api/state');
   $('connection-warning').classList.add('hidden');
@@ -327,7 +588,11 @@ async function refresh() {
   const conservationChanged=JSON.stringify(data.conservation_runs||[])!==JSON.stringify(state.conservationRuns);
   state.conservationRuns=data.conservation_runs||[];
   state.structures=data.structures;state.jobs=data.jobs;
-  if(changed) {renderLibrary(); if(!state.selected&&state.structures.length)await loadStructure(state.structures[0].id);}
+  if(changed) {
+    renderLibrary();
+    if(state.selected&&!state.structures.some(r=>r.id===state.selected))state.selected=null;
+    if(!state.selected&&state.structures.length)await loadStructure(state.structures[0].id);
+  }
   if(jobsChanged)renderJobs();
   if(conservationChanged&&state.detail&&$('conservation-chain').value){const runs=conservationRunOptions();await loadConservation(runs[0]?.id||'');}
   if(state.page==='experiments'&&state.job) {
@@ -347,6 +612,40 @@ function renderSystem(status) {
   $('system-content').innerHTML=`<p class="small muted">Database location</p><div class="system-path">${esc(status.db_dir)}</div><p class="small muted">Model weights</p><div class="system-path">${esc(status.model_dir)}</div><div class="system-row"><span>af3.bin model weights</span><b class="${status.weights_ready?'ok':''}">${status.weights_ready?'Found':'Missing'}</b></div>${status.databases.map(f=>`<div class="system-row"><code>${esc(f.name)}</code><span class="${f.present?'ok':''}">${f.present?(f.bytes?(f.bytes/1024**3).toFixed(1)+' GiB':'Found'):'Missing'}</span></div>`).join('')}<p class="small muted">Search tools</p>${Object.entries(status.tools).map(([name,path])=>`<div class="system-row"><span>${esc(name)}</span><span class="${path?'ok':''}">${path?'Found':'Missing'}</span></div>`).join('')}<p class="small muted">${esc(status.note)} ${status.cpu_count} logical CPU cores detected. The Apple Silicon backend is experimental.</p><p class="small muted">Explorer outputs</p><div class="system-path">${esc(status.data_dir)}</div>`;
 }
 async function init() {
+  // Theme and UI Mode
+  applyTheme(getPreferredTheme());
+  applyUIMode(getPreferredMode());
+  on('theme-toggle','click',toggleTheme);
+  on('sidebar-theme-toggle','click',toggleTheme);
+  on('mode-explorer','click',()=>applyUIMode('explorer'));
+  on('mode-scientist','click',()=>applyUIMode('scientist'));
+
+  // 3D Quick Actions for Beginners
+  on('quick-spin','click',toggleSpin);
+  on('quick-focus','click',focusInterface);
+  on('quick-surface','click',toggleSurface);
+  on('quick-color','click',cycleColor);
+  on('quick-guide-btn','click',openQuickGuide);
+
+  // Local Data Portal & Beginner Guide
+  on('portal-open','click',()=>openLocalPortal('apps'));
+  on('sidebar-portal','click',()=>openLocalPortal('apps'));
+  on('guide-open','click',openQuickGuide);
+  on('tab-apps','click',()=>switchPortalTab('apps'));
+  on('tab-data','click',()=>switchPortalTab('data'));
+  on('tab-weights','click',()=>switchPortalTab('weights'));
+
+  document.querySelectorAll('.copy-code-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      const code=btn.dataset.copy;
+      if(code){
+        navigator.clipboard.writeText(code).then(()=>{
+          const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>{btn.textContent=orig;},2000);
+        });
+      }
+    };
+  });
+
   document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
   document.querySelectorAll('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());
   on('structure-search','input',renderLibrary);
@@ -372,7 +671,9 @@ async function init() {
   on('import-pdb','click',()=>importData({pdb_id:$('pdb-code').value}));
   on('import-folder','click',()=>importData({path:$('import-path').value,kind:$('import-predicted').checked?'prediction':'reference'}));
   on('cif-upload','change',async e=>{const file=e.target.files[0];if(file){await importData({cif:await file.text(),name:file.name,kind:$('import-predicted').checked?'prediction':'reference'});e.target.value='';}});
-  setupConservation();
+  setupConservation();setupFinder();setupJobSwipe();
+  on('sidebar-new','click',()=>openExperiment());
+  state.emptyJobDetail=$('job-detail').innerHTML;
   const initial=await api('/api/bootstrap');Object.assign(state,{token:initial.token,structures:initial.structures,presets:initial.presets,jobs:initial.jobs,conservationRuns:initial.conservation_runs||[],rate4site:initial.status.rate4site});
   $('run-backend').value=initial.status.backend_default;renderSystem(initial.status);renderLibrary();renderJobs();
   $('preset-list').innerHTML=state.presets.map(p=>`<button class="preset-button" data-preset="${esc(p.id)}"><strong>${esc(p.name)}</strong><small>${esc(p.description)}</small></button>`).join('');
