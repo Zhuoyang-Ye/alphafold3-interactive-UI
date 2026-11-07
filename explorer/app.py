@@ -14,6 +14,7 @@ import re
 import secrets
 import shutil
 import signal
+import sys
 import threading
 from urllib.parse import parse_qs, unquote, urlsplit
 
