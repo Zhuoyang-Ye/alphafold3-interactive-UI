@@ -1693,3 +1693,61 @@ label[data-tip], .stat[data-tip], .confidence-metrics > [data-tip],
   .toast { left: 50%; width: 92%; }
   .app-cards-grid { grid-template-columns: 1fr; }
 }
+
+/* =====================================================================
+   Explorer vs. Scientist Dynamic Layout Behaviors
+   Adapts smoothly as the user resizes or drags the window.
+   ===================================================================== */
+
+/* Explorer Mode: Focused 3D Visual Immersion */
+[data-mode="explorer"] #story-card {
+  display: grid;
+}
+[data-mode="explorer"] #advanced-panels-section {
+  display: none !important;
+}
+[data-mode="explorer"] .scientific-note {
+  display: none;
+}
+[data-mode="explorer"] .molecular-viewer {
+  height: 560px;
+}
+
+/* Scientist Mode: Biophysical Research Dashboard */
+[data-mode="scientist"] #story-card {
+  display: none;
+}
+[data-mode="scientist"] #advanced-panels-section {
+  display: block;
+}
+[data-mode="scientist"] .scientific-note {
+  display: block;
+}
+[data-mode="scientist"] .molecular-viewer {
+  height: 480px;
+}
+
+/* Widescreen Multi-Column Layout for Scientist Mode */
+@media (min-width: 1360px) {
+  [data-mode="scientist"] #advanced-panels-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  [data-mode="scientist"] .confidence-panel,
+  [data-mode="scientist"] .conservation-panel {
+    margin: 0;
+    height: 100%;
+  }
+}
+
+/* Window Resizing Adaptations */
+@media (max-width: 1190px) {
+  [data-mode="scientist"] #advanced-panels-section {
+    grid-template-columns: 1fr;
+  }
+  [data-mode="explorer"] .molecular-viewer {
+    height: 450px;
+  }
+}
