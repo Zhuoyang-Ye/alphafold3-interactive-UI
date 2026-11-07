@@ -1,10 +1,10 @@
 ![header](docs/header.jpg)
 
-> **New to Python, or running on a Mac?** Start with
-> [GETTING_STARTED_MACOS.md](GETTING_STARTED_MACOS.md), a step-by-step guide
-> to installing and using AlphaFold 3 and its local web explorer on Apple Silicon.
-> Preview the explorer in your browser with the read-only
-> [online demo](https://zhuoyang-ye.github.io/alphafold3-interactive-UI/).
+> **Looking for the Desktop App or Online Demo?**
+> - **[Online Demo](https://zhuoyang-ye.github.io/alphafold3-interactive-UI/)**: Explore 3D molecular structures, contacts, and interfaces right in your browser with Dark/Light mode and beginner-friendly Explorer mode.
+> - **[macOS Desktop App](apps/macos/README.md)**: Native Mac app for Apple Silicon & Intel with one-click launch.
+> - **[Windows Desktop App](apps/windows/README_WINDOWS.md)**: Portable Windows app with automated setup and NVIDIA CUDA / CPU support.
+> - **[Mac Getting Started Guide](GETTING_STARTED_MACOS.md)**: Step-by-step setup guide for running AlphaFold 3 locally.
 
 # AlphaFold 3
 

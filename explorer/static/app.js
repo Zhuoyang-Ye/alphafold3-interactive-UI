@@ -48,7 +48,9 @@ function makeViewer(id) {
   const element=$(id); element.innerHTML='';
   if(!window.$3Dmol) throw new Error('The local 3D viewer did not load. Reload the page.');
   let viewer;
-  try {viewer=$3Dmol.createViewer(element,{backgroundColor:'#111f24',antialias:true});}
+  const isDark = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark';
+  const bg = isDark ? '#081014' : '#0f1a20';
+  try {viewer=$3Dmol.createViewer(element,{backgroundColor:bg,antialias:true});}
   catch(error) {element.innerHTML='<div class="viewer-loading">3D rendering needs WebGL enabled in your browser.</div>'; throw error;}
   new ResizeObserver(()=>viewer.resize()).observe(element);
   return viewer;
@@ -69,6 +71,171 @@ function styleViewer(viewer, detail, {style='cartoon',color='chain',hidden=new S
   }
   viewer.render();
 }
+const STORIES = {
+  tetr_homodimer: {
+    title: 'TetR · Bacterial Antibiotic Shield',
+    tag: 'Bacterial Defense',
+    text: 'You are viewing TetR (Tetracycline Repressor) in its resting state. Bacteria use two connected copies of this protein to sense antibiotic drugs. Notice the two large helical arms ready to clamp down on bacterial DNA.'
+  },
+  tetr_dimer_dna: {
+    title: 'TetR · Clamped onto DNA',
+    tag: 'Genetic Switch',
+    text: 'Here, the TetR protein pair has gripped a double strand of DNA. By holding onto the DNA like a molecular clamp, it physically blocks the cell from reading antibiotic resistance genes until medicine is actually present.'
+  },
+  tetr_dimer_tetracycline: {
+    title: 'TetR · Disarmed by Antibiotic Drug',
+    tag: 'Drug Binding',
+    text: 'Look into the binding pocket: a tetracycline antibiotic molecule is nestled deep inside. The drug pushes the protein jaws outward, forcing TetR to let go of DNA and letting bacteria turn on their defense pumps.'
+  },
+  ubiquitin_monomer: {
+    title: 'Ubiquitin · Cellular Recycling Barcode',
+    tag: 'Nobel Prize Discovery',
+    text: 'A compact 76-amino-acid protein found throughout all animals and plants. When a cellular machine becomes worn out, ubiquitin molecules are attached to it like a disposal tag, sending it to the cellular recycling shredder.'
+  },
+  barnase_barstar: {
+    title: 'Barnase + Barstar · Molecular Lock & Key',
+    tag: 'Tightest Binding',
+    text: 'One of nature\'s strongest protein handshakes. Barnase is a lethal bacterial toxin that cuts RNA, and Barstar is its protective antidote shield that locks into place with extraordinary speed to prevent self-destruction.'
+  },
+  u1a_rna_hairpin: {
+    title: 'U1A + RNA · Genetic Decoder',
+    tag: 'RNA Recognition',
+    text: 'Shows how human proteins recognize specific genetic instructions in RNA. The U1A protein binds an RNA hairpin loop, guiding cellular machinery during gene splicing.'
+  },
+  streptavidin_biotin_smiles: {
+    title: 'Streptavidin + Biotin · Molecular Superglue',
+    tag: 'Biotechnology Velcro',
+    text: 'The strongest non-covalent bond known in nature. Biotin (vitamin B7) docks into a deep pocket of Streptavidin so tightly that scientists use this pair as universal molecular superglue in medical diagnostic tests.'
+  }
+};
+
+function updateStoryCard(detail) {
+  const card = $('story-card');
+  if (!card) return;
+  const match = STORIES[detail.id] || Object.entries(STORIES).find(([k]) => detail.name.toLowerCase().includes(k.replace(/_/g, ' ')))?.[1];
+  if (match) {
+    $('story-heading').textContent = match.title;
+    $('story-tag').textContent = match.tag;
+    $('story-text').textContent = match.text;
+  } else {
+    const kinds = [...new Set(detail.chains.map(c => shortKind(c.kind)))];
+    $('story-heading').textContent = detail.name;
+    $('story-tag').textContent = detail.predicted ? 'AF3 Prediction' : 'Reference Structure';
+    $('story-text').textContent = `This structure contains ${fmt(detail.atom_count)} heavy atoms across ${detail.chains.length} chains (${kinds.join(', ')}). Look at the contacts on the right to see where individual chains touch and interact.`;
+  }
+}
+
+let isSpinning = false;
+let spinReqId = null;
+function toggleSpin() {
+  isSpinning = !isSpinning;
+  const btn = $('quick-spin');
+  if (btn) btn.classList.toggle('active-action', isSpinning);
+  if (isSpinning) {
+    function step() {
+      if (!isSpinning || !state.viewer) return;
+      state.viewer.rotate(0.5, 'y');
+      state.viewer.render();
+      spinReqId = requestAnimationFrame(step);
+    }
+    spinReqId = requestAnimationFrame(step);
+  } else if (spinReqId) {
+    cancelAnimationFrame(spinReqId);
+    spinReqId = null;
+  }
+}
+
+function focusInterface() {
+  if (!state.viewer) return;
+  if (state.contacts && state.contacts.rows && state.contacts.rows.length) {
+    const contact = state.contacts.rows[0];
+    highlightContact(contact, true);
+  } else {
+    state.viewer.zoomTo();
+    state.viewer.render();
+  }
+}
+
+function toggleSurface() {
+  state.style = (state.style === 'cartoon') ? 'sphere' : 'cartoon';
+  document.querySelectorAll('[data-style]').forEach(b => b.classList.toggle('selected', b.dataset.style === state.style));
+  const btn = $('quick-surface');
+  if (btn) btn.classList.toggle('active-action', state.style === 'sphere');
+  applyMainStyle();
+}
+
+function cycleColor() {
+  const current = $('color-mode').value;
+  const next = (current === 'chain' && state.detail?.predicted) ? 'confidence' : 'chain';
+  state.color = next;
+  $('color-mode').value = next;
+  applyMainStyle();
+}
+
+function getPreferredTheme() {
+  const saved = localStorage.getItem('af3_theme');
+  if (saved) return saved;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('af3_theme', theme);
+  const icon = theme === 'dark' ? '☀️' : '🌙';
+  const label = theme === 'dark' ? 'Light' : 'Dark';
+  if ($('theme-icon')) $('theme-icon').textContent = icon;
+  if ($('theme-label')) $('theme-label').textContent = label;
+  document.querySelectorAll('.theme-icon-indicator').forEach(el => el.textContent = icon);
+  if (state.viewer) {
+    const bg = theme === 'dark' ? '#081014' : '#0f1a20';
+    state.viewer.setBackgroundColor(bg);
+    state.viewer.render();
+  }
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+window.toggleAppTheme = toggleTheme;
+
+function getPreferredMode() {
+  return localStorage.getItem('af3_ui_mode') || 'explorer';
+}
+function applyUIMode(mode) {
+  state.uiMode = mode;
+  localStorage.setItem('af3_ui_mode', mode);
+  $('mode-explorer')?.classList.toggle('selected', mode === 'explorer');
+  $('mode-scientist')?.classList.toggle('selected', mode === 'scientist');
+  if (mode === 'explorer') {
+    $('story-card')?.classList.remove('hidden');
+    $('advanced-panels-section')?.classList.add('hidden');
+  } else {
+    $('story-card')?.classList.remove('hidden');
+    $('advanced-panels-section')?.classList.remove('hidden');
+  }
+}
+function toggleMode() {
+  applyUIMode(state.uiMode === 'explorer' ? 'scientist' : 'explorer');
+}
+window.toggleAppMode = toggleMode;
+
+function openLocalPortal(tab = 'apps') {
+  $('portal-dialog').showModal();
+  switchPortalTab(tab);
+}
+window.openLocalPortal = openLocalPortal;
+
+function switchPortalTab(tab) {
+  ['apps', 'data', 'weights'].forEach(t => {
+    $('tab-' + t)?.classList.toggle('selected', t === tab);
+    $('tab-' + t)?.setAttribute('aria-selected', t === tab);
+    $('pane-' + t)?.classList.toggle('hidden', t !== tab);
+  });
+}
+function openQuickGuide() {
+  $('guide-dialog').showModal();
+}
+window.openQuickGuide = openQuickGuide;
+
 function applyMainStyle() {
   if(!state.viewer||!state.detail) return;
   state.viewer.removeAllLabels();state.viewer.removeAllShapes();
@@ -98,6 +265,7 @@ async function loadStructure(id) {
   $('color-mode').querySelector('[value="confidence"]').disabled=!detail.predicted;
   if(!detail.predicted) {state.color='chain';$('color-mode').value='chain';}
   renderStats();
+  updateStoryCard(detail);
   if(!state.viewer) state.viewer=makeViewer('main-viewer');
   state.viewer.removeAllModels();state.viewer.removeAllLabels();state.viewer.removeAllShapes();
   state.viewer.addModel(cif,'cif',{doAssembly:false,keepH:false});
@@ -444,6 +612,40 @@ function renderSystem(status) {
   $('system-content').innerHTML=`<p class="small muted">Database location</p><div class="system-path">${esc(status.db_dir)}</div><p class="small muted">Model weights</p><div class="system-path">${esc(status.model_dir)}</div><div class="system-row"><span>af3.bin model weights</span><b class="${status.weights_ready?'ok':''}">${status.weights_ready?'Found':'Missing'}</b></div>${status.databases.map(f=>`<div class="system-row"><code>${esc(f.name)}</code><span class="${f.present?'ok':''}">${f.present?(f.bytes?(f.bytes/1024**3).toFixed(1)+' GiB':'Found'):'Missing'}</span></div>`).join('')}<p class="small muted">Search tools</p>${Object.entries(status.tools).map(([name,path])=>`<div class="system-row"><span>${esc(name)}</span><span class="${path?'ok':''}">${path?'Found':'Missing'}</span></div>`).join('')}<p class="small muted">${esc(status.note)} ${status.cpu_count} logical CPU cores detected. The Apple Silicon backend is experimental.</p><p class="small muted">Explorer outputs</p><div class="system-path">${esc(status.data_dir)}</div>`;
 }
 async function init() {
+  // Theme and UI Mode
+  applyTheme(getPreferredTheme());
+  applyUIMode(getPreferredMode());
+  on('theme-toggle','click',toggleTheme);
+  on('sidebar-theme-toggle','click',toggleTheme);
+  on('mode-explorer','click',()=>applyUIMode('explorer'));
+  on('mode-scientist','click',()=>applyUIMode('scientist'));
+
+  // 3D Quick Actions for Beginners
+  on('quick-spin','click',toggleSpin);
+  on('quick-focus','click',focusInterface);
+  on('quick-surface','click',toggleSurface);
+  on('quick-color','click',cycleColor);
+  on('quick-guide-btn','click',openQuickGuide);
+
+  // Local Data Portal & Beginner Guide
+  on('portal-open','click',()=>openLocalPortal('apps'));
+  on('sidebar-portal','click',()=>openLocalPortal('apps'));
+  on('guide-open','click',openQuickGuide);
+  on('tab-apps','click',()=>switchPortalTab('apps'));
+  on('tab-data','click',()=>switchPortalTab('data'));
+  on('tab-weights','click',()=>switchPortalTab('weights'));
+
+  document.querySelectorAll('.copy-code-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      const code=btn.dataset.copy;
+      if(code){
+        navigator.clipboard.writeText(code).then(()=>{
+          const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>{btn.textContent=orig;},2000);
+        });
+      }
+    };
+  });
+
   document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
   document.querySelectorAll('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());
   on('structure-search','input',renderLibrary);

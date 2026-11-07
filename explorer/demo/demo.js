@@ -70,11 +70,15 @@
     document.querySelector('.experiment-intro p').textContent = 'Saved jobs from a local run, with their inputs and logs as recorded.';
     const banner = document.createElement('div');
     banner.className = 'notice demo-notice';
-    banner.innerHTML = `<strong>Read-only online demo.</strong> Explore structures, contacts, confidence, and conservation saved from a local run of this explorer. To run your own predictions, <a href="${repo}/blob/main/GETTING_STARTED_MACOS.md">install it on your Mac</a> · <a href="${repo}">Source on GitHub</a>` +
+    banner.innerHTML = `<strong>Interactive Online Demo.</strong> Explore 3D structures, molecular interfaces, contacts, confidence, and conservation. ` +
+      `To run predictions on your own molecules, <button id="demo-portal-btn" style="background:none;border:none;color:var(--green);font-weight:700;text-decoration:underline;cursor:pointer;font-size:inherit;padding:0;">download the Mac / Windows App &amp; set up local compute ↗</button> · <a href="${repo}">Source on GitHub</a>` +
       '<small>Predicted structures are AlphaFold 3 output, provided under and subject to the <a href="https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md">AlphaFold 3 Output Terms of Use</a>. ' +
       'The 3D view shows modified coordinates (first model; waters and hydrogens removed); ↓ mmCIF downloads the unmodified file. ' +
       'Cite: Abramson, J. et al. Accurate structure prediction of biomolecular interactions with AlphaFold 3. <i>Nature</i> 630, 493–500 (2024). ' +
       'Experimental structures are from the <a href="https://www.wwpdb.org/">Protein Data Bank</a>.</small>';
     document.querySelector('.page-header').after(banner);
+    document.getElementById('demo-portal-btn')?.addEventListener('click', () => {
+      if (typeof window.openLocalPortal === 'function') window.openLocalPortal('apps');
+    });
   });
 })();

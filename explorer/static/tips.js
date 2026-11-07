@@ -4,6 +4,20 @@
 // scores, job lists) gets them too. The first matching selector wins.
 
 const TIPS = [
+  // Top Header & Mode Controls
+  ['#theme-toggle', 'Switch between dark and light appearance.'],
+  ['#sidebar-theme-toggle', 'Switch between dark and light appearance.'],
+  ['#mode-explorer', 'Explorer mode: simplified, distraction-free 3D exploration with plain-English guides.'],
+  ['#mode-scientist', 'Scientist mode: full biophysical parameters, PAE matrices, and evolutionary analyses.'],
+  ['#portal-open', 'Open the Local Data Portal: download desktop apps and automate local database downloading.'],
+  ['#sidebar-portal', 'Open the Local Data Portal: download desktop apps and automate local database downloading.'],
+  ['#guide-open', 'Beginner quick guide: understand ribbons, colors, helices, and 3D navigation.'],
+  ['#quick-spin', 'Start or stop continuous smooth 3D rotation.'],
+  ['#quick-focus', 'Zoom camera into the closest molecular contact points.'],
+  ['#quick-surface', 'Toggle space-filling atomic sphere view vs cartoon ribbons.'],
+  ['#quick-color', 'Cycle coloring mode (by chain vs by confidence score).'],
+  ['#quick-guide-btn', 'Open beginner guide for 3D molecular shapes.'],
+
   // Sidebar
   ['#sidebar-new', 'Design and run a new AlphaFold 3 prediction.'],
   ['#import-open', 'Add a structure to your library: a PDB ID from your local snapshot, an AF3 output folder, or an mmCIF file.'],
