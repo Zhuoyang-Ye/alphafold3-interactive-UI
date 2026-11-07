@@ -1751,3 +1751,33 @@ label[data-tip], .stat[data-tip], .confidence-metrics > [data-tip],
     height: 450px;
   }
 }
+
+/* =====================================================================
+   Desktop App Window Draggable Regions & Interaction Protections
+   ===================================================================== */
+.page-header,
+.brand,
+.workspace-label {
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.header-actions,
+.header-actions *,
+.sidebar nav,
+.sidebar nav *,
+.sidebar input,
+.sidebar button,
+.sidebar a,
+.molecular-viewer,
+.compare-viewer,
+.viewer-card canvas,
+.modal-card,
+button,
+input,
+select,
+textarea,
+a {
+  -webkit-app-region: no-drag;
+}
+

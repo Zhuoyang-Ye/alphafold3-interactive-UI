@@ -24,15 +24,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
 
         window = NSWindow(
             contentRect: rect,
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
         window.title = "AlphaFold 3 · Interaction Studio"
-        window.titlebarAppearsTransparent = true
+        window.titlebarAppearsTransparent = false
         window.titleVisibility = .visible
+        window.isMovableByWindowBackground = true
+        window.collectionBehavior = [.fullScreenPrimary]
         window.minSize = NSSize(width: 960, height: 680)
         window.isReleasedWhenClosed = false
+
+        if #available(macOS 11.0, *) {
+            window.titlebarSeparatorStyle = .line
+        }
 
         let config = WKWebViewConfiguration()
         config.preferences.setValue(true, forKey: "developerExtrasEnabled")
@@ -43,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
         prefs.allowsContentJavaScript = true
         config.defaultWebpagePreferences = prefs
 
-        webView = WKWebView(frame: rect, configuration: config)
+        webView = WKWebView(frame: window.contentView?.bounds ?? rect, configuration: config)
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.autoresizingMask = [.width, .height]
